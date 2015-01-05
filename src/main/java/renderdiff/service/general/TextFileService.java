@@ -45,10 +45,15 @@ public class TextFileService {
      */
     public static String readTextResource(Object object, String path) {
         System.out.println("Loading: " + path);
-        InputStream inputStream = object.getClass().getClassLoader().getResourceAsStream(path);
+        InputStream inputStream = object.getClass().getResourceAsStream(path);
         return readTextFromInputStream(inputStream);
     }
 
+    /**
+     *
+     * @param inputStream Text input stream
+     * @return Text from file
+     */
     public static String readTextFromInputStream(InputStream inputStream) {
         BufferedReader bufferedReader = null;
         StringBuilder stringBuilder = new StringBuilder();
@@ -79,6 +84,11 @@ public class TextFileService {
         return stringBuilder.toString();
     }
 
+    /**
+     *
+     * @param path Source path
+     * @return InputStream
+     */
     public static InputStream createInputStreamFromFile(String path) {
         File initialFile = new File(path);
         InputStream result = null;
@@ -91,6 +101,11 @@ public class TextFileService {
         return result;
     }
 
+    /**
+     *
+     * @param path Source path
+     * @return Document text
+     */
     public static String readTextFromFile(String path) {
         File file = new File(path);
         FileReader fileReader = null;

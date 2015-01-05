@@ -3,7 +3,15 @@ package renderdiff.service.general;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class CryptoService {
+/**
+ *
+ */
+public class DigestService {
+    /**
+     * SHA1 Digest
+     * @param source Source to digest
+     * @return Digest
+     */
     public static String getSHA1(byte[] source) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");

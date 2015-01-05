@@ -28,7 +28,7 @@ public class BrowserStateChangeListener implements ChangeListener<Worker.State> 
                 if (stallTask != null) {
                     stallTask.cancel();
                 }
-                browserStateChangeHandler.onChangeSuccess();
+                browserStateChangeHandler.onPageLoadSuccess();
                 break;
             case FAILED:
                 if (stallTask != null) {

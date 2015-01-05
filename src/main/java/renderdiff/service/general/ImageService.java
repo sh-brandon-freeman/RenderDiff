@@ -10,13 +10,26 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ *
+ */
 public class ImageService {
 
+    /**
+     *
+     * @param webView WebView
+     * @return BufferedImage
+     */
     public static BufferedImage getBufferedImageFromWebView(WebView webView) {
         WritableImage image = webView.snapshot(new SnapshotParameters(), null);
         return SwingFXUtils.fromFXImage(image, null);
     }
 
+    /**
+     *
+     * @param img Source image
+     * @param path Destination path
+     */
     public static void saveImageFromBufferedImage(BufferedImage img, String path) {
         File file = new File(path);
         try {
@@ -32,6 +45,11 @@ public class ImageService {
         }
     }
 
+    /**
+     *
+     * @param path Source path
+     * @return BufferedImage
+     */
     public static BufferedImage loadBufferedImageFromFile(String path) {
         File file = new File(path);
         BufferedImage result = null;

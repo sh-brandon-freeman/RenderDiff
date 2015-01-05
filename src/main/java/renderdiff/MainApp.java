@@ -21,6 +21,10 @@ public class MainApp extends Application implements PageQueueInterface {
     protected int current = 0;
     protected PageAnalyzerService pageAnalyzerService;
 
+    /**
+     *
+     * @param stage
+     */
     @Override
     public void start(final Stage stage) {
         stage.setTitle("Browser");
@@ -29,7 +33,8 @@ public class MainApp extends Application implements PageQueueInterface {
         Scene scene = new Scene(new Group());
         VBox root = new VBox();
 
-        urls.add("http://localhost:3000/#/splash");
+        //urls.add("http://localhost:3000/#/splash");
+        urls.add("http://localhost:3150/#redirect=true");
 
         final WebView webView = new WebView();
 
@@ -49,6 +54,11 @@ public class MainApp extends Application implements PageQueueInterface {
         stage.show();
     }
 
+    /**
+     * Add url to list.
+     *
+     * @param url URL to add
+     */
     @Override
     public void addUrl(String url) {
         System.out.print("Attempting to add: " + url);
@@ -60,6 +70,9 @@ public class MainApp extends Application implements PageQueueInterface {
         }
     }
 
+    /**
+     * Iterate to next url
+     */
     @Override
     public void iterate() {
         current++;
@@ -71,6 +84,11 @@ public class MainApp extends Application implements PageQueueInterface {
         }
     }
 
+    /**
+     * Main
+     *
+     * @param args Arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
