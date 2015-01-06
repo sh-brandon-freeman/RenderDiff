@@ -18,6 +18,7 @@ import renderdiff.service.general.ImageService;
 import renderdiff.service.general.TextFileService;
 import renderdiff.service.html.ParserService;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.*;
@@ -78,7 +79,7 @@ public class PageAnalyzerService implements BrowserStateChangeHandlerInterface {
 
         System.out.println("New page height: " + newHeight);
 
-        webView.resize(webView.getWidth(), newHeight);
+        webView.setPrefHeight(newHeight);
 
         return newHeight;
     }
@@ -135,39 +136,53 @@ public class PageAnalyzerService implements BrowserStateChangeHandlerInterface {
      *
      */
     private void compareVisualState() {
-        String storedPath = currentPath + File.separator + "store" + File.separator + urlHash + ".png";
+        String currentStoredPath = currentPath + File.separator + "store" + File.separator + urlHash + ".png";
         String knownStoredPath = basePath + knownState + File.separator + urlHash + ".png";
 
         String currentImagePath = currentPath + File.separator + urlHash + "-now.png";
         String knownImagePath = currentPath + File.separator + urlHash + "-known.png";
         String diffImagePath = currentPath + File.separator + urlHash + "-diff.png";
 
-        Path tempFile = null;
-        try {
-            tempFile = Files.createTempFile("tempfiles", ".png");
-        } catch (IOException ex) {
-            System.out.println("IOException" + ex.getMessage());
-        }
+        File knownFile = new File(knownStoredPath);
+        if (knownFile.exists() && !knownFile.isDirectory()) {
 
-        if (tempFile != null) {
-            BufferedImage currentView = ImageService.getBufferedImageFromWebView(webView);
-            ImageService.saveImageFromBufferedImage(currentView, storedPath);
+            try {
+                Path tempDiff = Files.createTempFile("diff-temp", ".png");
+                Path tempKnown = Files.createTempFile("diff-known", ".png");
+                Path tempCurrent = Files.createTempFile("diff-now", ".png");
 
-            File knownFile = new File(knownStoredPath);
-            if (knownFile.exists() && !knownFile.isDirectory()) {
-                boolean isDifferent = ImageCompareService.pdiff(knownStoredPath, storedPath, tempFile.toString());
+                BufferedImage imageCurrent = ImageService.getBufferedImageFromWebView(webView);
+                BufferedImage imageKnown = ImageService.loadBufferedImageFromFile(knownStoredPath);
+
+                // Save unmodified copy to store.
+                ImageService.saveImageFromBufferedImage(imageCurrent, currentStoredPath);
+
+                Rectangle dimensions = ImageService.calculateMaxDimensions(imageKnown, imageCurrent);
+
+                imageKnown = ImageService.resizeImageCanvas(imageKnown, dimensions);
+                imageCurrent = ImageService.resizeImageCanvas(imageCurrent, dimensions);
+
+                ImageService.saveImageFromBufferedImage(imageKnown, tempKnown.toString());
+                ImageService.saveImageFromBufferedImage(imageCurrent, tempCurrent.toString());
+
+                boolean isDifferent = ImageCompareService.pdiff(
+                        tempKnown.toString(),
+                        tempCurrent.toString(),
+                        tempDiff.toString()
+                );
 
                 if (isDifferent) {
-                    try {
-                        Files.move(tempFile, Paths.get(diffImagePath), StandardCopyOption.REPLACE_EXISTING);
-                        Files.copy(Paths.get(knownStoredPath), Paths.get(knownImagePath), StandardCopyOption.REPLACE_EXISTING);
-                        Files.copy(Paths.get(storedPath), Paths.get(currentImagePath), StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException ex) {
-                        System.out.println("IOException" + ex.getMessage());
-                    }
+                    Files.move(tempDiff, Paths.get(diffImagePath), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(tempKnown, Paths.get(knownImagePath), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(tempCurrent, Paths.get(currentImagePath), StandardCopyOption.REPLACE_EXISTING);
+                } else {
+                    // Don't rely on others to do your dirty work ...
+                    Files.delete(tempDiff);
+                    Files.delete(tempKnown);
+                    Files.delete(tempCurrent);
                 }
-            } else {
-                System.out.println("No known state.");
+            } catch (IOException ex) {
+                System.out.println("IOException" + ex.getMessage());
             }
         }
     }
@@ -177,10 +192,10 @@ public class PageAnalyzerService implements BrowserStateChangeHandlerInterface {
      */
     public void processDocument() {
         setDocumentHeight();
-//        List<String> urlList = ParserService.getLinks(webEngine);
-//        for (String url : urlList) {
-//            pageQueue.addUrl(url);
-//        }
+        List<String> urlList = ParserService.getLinks(webEngine);
+        for (String url : urlList) {
+            pageQueue.addUrl(url);
+        }
         compareVisualState();
         pageQueue.iterate();
     }

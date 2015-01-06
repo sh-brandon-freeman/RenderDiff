@@ -26,7 +26,7 @@ public class ImageCompareService {
         ImageCommand compare=new ImageCommand();
         compare.setCommand("compare");
         IMOperation op = new IMOperation();
-        //op.fuzz(30.0);
+        op.fuzz(5.0);
         op.metric("RMSE");
         op.highlightColor("Red");
         op.compose("src");
