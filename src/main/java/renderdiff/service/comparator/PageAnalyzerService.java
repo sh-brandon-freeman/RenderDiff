@@ -9,6 +9,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Duration;
 import netscape.javascript.JSException;
+import org.w3c.dom.Document;
 import renderdiff.service.event.BrowserStateChangeListener;
 import renderdiff.service.event.BrowserStateChangeHandlerInterface;
 import renderdiff.service.general.DigestService;
@@ -58,7 +59,7 @@ public class PageAnalyzerService implements BrowserStateChangeHandlerInterface {
         currentPath = basePath + currentTimestamp + File.separator;
 
         webEngine.getLoadWorker().stateProperty().addListener(
-            new BrowserStateChangeListener(webEngine, this)
+                new BrowserStateChangeListener(webEngine, this)
         );
 
         webEngine.getLoadWorker().exceptionProperty().addListener(new ChangeListener<Throwable>() {
@@ -69,32 +70,43 @@ public class PageAnalyzerService implements BrowserStateChangeHandlerInterface {
         });
     }
 
+    private double setDocumentHeight() {
+        String heightText = webView.getEngine().executeScript(
+                "window.getComputedStyle(document.body, null).getPropertyValue('height')"
+        ).toString();
+        Double newHeight = Math.ceil(Double.valueOf(heightText.replace("px", "")));
+
+        System.out.println("New page height: " + newHeight);
+
+        webView.resize(webView.getWidth(), newHeight);
+
+        return newHeight;
+    }
+
     /**
      *
      */
     @Override
     public void onPageLoadSuccess() {
-        System.out.println("Executing on Load Success.");
-
         boolean isFinished = false;
         try {
+            System.out.print("Has the page finished? ");
             isFinished = (Boolean) webEngine.executeScript("window.isLoadComplete();");
         } catch (JSException ex) {
             System.out.println("JSException: " + ex.getMessage());
         }
         if (!isFinished) {
-            System.out.println("Page is not loaded.");
-            System.out.println("Waiting " + waitTime / 1000 + "s");
+            System.out.println("Nope. Waiting " + (waitTime / 1000) + "s ...");
             PauseTransition pause = new PauseTransition(Duration.millis(waitTime));
             pause.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    System.out.println("Once Again.");
                     onPageLoadSuccess();
                 }
             });
             pause.play();
         } else {
+            System.out.println("Yes!");
             processDocument();
         }
     }
@@ -141,7 +153,7 @@ public class PageAnalyzerService implements BrowserStateChangeHandlerInterface {
             BufferedImage currentView = ImageService.getBufferedImageFromWebView(webView);
             ImageService.saveImageFromBufferedImage(currentView, storedPath);
 
-            File knownFile = new File(knownImagePath);
+            File knownFile = new File(knownStoredPath);
             if (knownFile.exists() && !knownFile.isDirectory()) {
                 boolean isDifferent = ImageCompareService.pdiff(knownStoredPath, storedPath, tempFile.toString());
 
@@ -164,10 +176,11 @@ public class PageAnalyzerService implements BrowserStateChangeHandlerInterface {
      *
      */
     public void processDocument() {
-        List<String> urlList = ParserService.getLinks(webEngine);
-        for (String url : urlList) {
-            pageQueue.addUrl(url);
-        }
+        setDocumentHeight();
+//        List<String> urlList = ParserService.getLinks(webEngine);
+//        for (String url : urlList) {
+//            pageQueue.addUrl(url);
+//        }
         compareVisualState();
         pageQueue.iterate();
     }

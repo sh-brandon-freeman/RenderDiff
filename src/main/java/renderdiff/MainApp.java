@@ -5,13 +5,22 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import renderdiff.service.comparator.PageAnalyzerService;
 import renderdiff.service.comparator.PageQueueInterface;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +47,12 @@ public class MainApp extends Application implements PageQueueInterface {
 
         final WebView webView = new WebView();
 
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+        scrollPane.setContent(webView);
+
         pageAnalyzerService = new PageAnalyzerService(webView, this);
         Button btnStart = new Button("Start");
         btnStart.setOnAction(new EventHandler<ActionEvent>() {
@@ -47,7 +62,7 @@ public class MainApp extends Application implements PageQueueInterface {
             }
         });
 
-        root.getChildren().addAll(btnStart, webView);
+        root.getChildren().addAll(btnStart, scrollPane);
         scene.setRoot(root);
 
         stage.setScene(scene);
