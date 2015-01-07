@@ -1,36 +1,29 @@
 package renderdiff;
 
-import javafx.animation.PauseTransition;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
-import javafx.scene.web.HTMLEditor;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import javafx.util.converter.NumberStringConverter;
-import renderdiff.service.comparator.PageAnalyzerService;
+import renderdiff.domain.entity.crawl.Crawl;
+import renderdiff.persistence.repository.crawl.CrawlRepository;
+import renderdiff.persistence.repository.crawl.RunRepository;
+import renderdiff.persistence.repository.node.NodeRepository;
+import renderdiff.persistence.repository.node.ResultRepository;
+import renderdiff.service.comparator.CrawlService;
 import renderdiff.service.comparator.PageQueueInterface;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,17 +31,24 @@ public class MainApp extends Application implements PageQueueInterface {
 
     protected List<String> urls = new ArrayList<String>();
     protected int current = 0;
-    protected PageAnalyzerService pageAnalyzerService;
+    protected CrawlService crawlService;
 
     double prefWidth = 1000;
     double prefHeight = 8000;
 
+    protected CrawlRepository crawlRepository;
+    protected NodeRepository nodeRepository;
+    protected ResultRepository resultRepository;
+    protected RunRepository runRepository;
+
     /**
      *
-     * @param stage
+     * @param stage Stage
      */
     @Override
     public void start(final Stage stage) {
+        initDb();
+
         stage.setTitle("Browser");
         stage.setWidth(1024);
         stage.setHeight(768);
@@ -63,14 +63,29 @@ public class MainApp extends Application implements PageQueueInterface {
 
         ScrollPane webViewScroll = new ScrollPane();
         webViewScroll.setContent(webView);
-        webViewScroll.setPrefSize(800, 700);
+        webViewScroll.setPrefSize(800, 500);
 
-        pageAnalyzerService = new PageAnalyzerService(webView, this);
+        Crawl crawl = null;
+        try {
+            crawl = this.crawlRepository.getById(1);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        crawlService = new CrawlService(
+                webView,
+                this,
+                crawl,
+                crawlRepository,
+                nodeRepository,
+                resultRepository,
+                runRepository
+        );
         Button btnStart = new Button("Start");
         btnStart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                pageAnalyzerService.loadDocument(urls.get(0));
+                crawlService.begin();
             }
         });
 
@@ -79,6 +94,25 @@ public class MainApp extends Application implements PageQueueInterface {
 
         stage.setScene(scene);
         stage.show();
+    }
+
+    protected void initDb() {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            ConnectionSource connectionSource = new JdbcConnectionSource("jdbc:sqlite:sample.db");
+
+            crawlRepository = new CrawlRepository(connectionSource);
+            nodeRepository = new NodeRepository(connectionSource);
+            //nodeRepository.createTable();
+            resultRepository = new ResultRepository(connectionSource);
+            //resultRepository.createTable();
+            runRepository = new RunRepository(connectionSource);
+            //runRepository.createTable();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
     }
 
     protected void setViewSize(WebView webView, double prefWidth, double prefHeight) {
@@ -126,7 +160,7 @@ public class MainApp extends Application implements PageQueueInterface {
         current++;
         if (urls.size() > current) {
             System.out.println("Iterating to next url.");
-            pageAnalyzerService.loadDocument(urls.get(current));
+            crawlService.loadDocument(urls.get(current));
         } else {
             System.out.println("Url list exhausted.");
         }
@@ -150,8 +184,6 @@ public class MainApp extends Application implements PageQueueInterface {
 
         return scroll;
     }
-
-
 
     /**
      * Main

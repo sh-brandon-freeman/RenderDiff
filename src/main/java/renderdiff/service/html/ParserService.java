@@ -77,7 +77,7 @@ public class ParserService {
                 continue;
             }
 
-            if (url.contains("phone:") || url.contains("mailto:")) {
+            if (url.contains("phone:") || url.contains("mailto:") || url.contains("javascript:")) {
                 continue;
             }
 
