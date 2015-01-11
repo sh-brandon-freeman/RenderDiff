@@ -8,8 +8,9 @@ import renderdiff.domain.repository.AbstractRepositoryInterface;
 
 import java.lang.reflect.ParameterizedType;
 import java.sql.SQLException;
+import java.util.List;
 
-public class AbstractRepository<T> implements AbstractRepositoryInterface<T> {
+abstract public class AbstractRepository<T> implements AbstractRepositoryInterface<T> {
     protected Dao<T, String> dao;
     protected ConnectionSource connectionSource;
     protected Class<T> genericClass;
@@ -23,6 +24,10 @@ public class AbstractRepository<T> implements AbstractRepositoryInterface<T> {
 
     public T getById(int id) throws SQLException {
         return dao.queryBuilder().where().eq("id", id).queryForFirst();
+    }
+
+    public List<T> getAll() throws SQLException {
+        return dao.queryBuilder().query();
     }
 
     public void create(T entity) throws SQLException {

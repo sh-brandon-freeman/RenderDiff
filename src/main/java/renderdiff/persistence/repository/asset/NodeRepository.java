@@ -1,8 +1,8 @@
-package renderdiff.persistence.repository.node;
+package renderdiff.persistence.repository.asset;
 
 import com.j256.ormlite.support.ConnectionSource;
-import renderdiff.domain.entity.node.Node;
-import renderdiff.domain.repository.node.NodeRepositoryInterface;
+import renderdiff.domain.entity.asset.Node;
+import renderdiff.domain.repository.asset.NodeRepositoryInterface;
 import renderdiff.persistence.repository.AbstractRepository;
 
 import java.sql.SQLException;

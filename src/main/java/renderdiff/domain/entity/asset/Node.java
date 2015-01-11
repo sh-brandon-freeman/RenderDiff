@@ -1,12 +1,11 @@
-package renderdiff.domain.entity.node;
+package renderdiff.domain.entity.asset;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import renderdiff.domain.entity.crawl.Crawl;
 
 import java.util.Date;
 
-@DatabaseTable(tableName = "crawl.nodes")
+@DatabaseTable(tableName = "asset.nodes")
 public class Node {
 
     @DatabaseField(generatedId = true)
@@ -16,7 +15,7 @@ public class Node {
     protected String name;
 
     @DatabaseField(canBeNull = false, foreign = true)
-    protected Crawl crawl;
+    protected Asset asset;
 
     @DatabaseField
     protected String url;
@@ -42,12 +41,12 @@ public class Node {
         return this;
     }
 
-    public Crawl getCrawl() {
-        return crawl;
+    public Asset getAsset() {
+        return asset;
     }
 
-    public Node setCrawl(Crawl crawl) {
-        this.crawl = crawl;
+    public Node setAsset(Asset asset) {
+        this.asset = asset;
         return this;
     }
 

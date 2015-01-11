@@ -1,16 +1,15 @@
-package renderdiff.domain.entity.crawl;
+package renderdiff.domain.entity.asset;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-import renderdiff.domain.entity.node.Node;
 
 /**
  * Crawl
  */
-@DatabaseTable(tableName = "crawl.crawls")
-public class Crawl {
+@DatabaseTable(tableName = "asset.assets")
+public class Asset {
 
     /**
      * ID
@@ -23,6 +22,12 @@ public class Crawl {
      */
     @DatabaseField
     protected String name;
+
+    /**
+     * Domain
+     */
+    @DatabaseField
+    protected String domain;
 
     /**
      * Load Complete Script
@@ -43,13 +48,6 @@ public class Crawl {
     protected ForeignCollection<Node> nodes;
 
     /**
-     * Constructor
-     */
-    public Crawl() {
-
-    }
-
-    /**
      *
      * @return Crawl ID
      */
@@ -62,7 +60,7 @@ public class Crawl {
      * @param id Crawl ID
      * @return Crawl
      */
-    public Crawl setId(int id) {
+    public Asset setId(int id) {
         this.id = id;
         return this;
     }
@@ -80,8 +78,17 @@ public class Crawl {
      * @param name Crawl Name
      * @return Crawl
      */
-    public Crawl setName(String name) {
+    public Asset setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public Asset setDomain(String domain) {
+        this.domain = domain;
         return this;
     }
 
@@ -98,7 +105,7 @@ public class Crawl {
      * @param loadCompleteScript Load Complete Script
      * @return Crawl
      */
-    public Crawl setLoadCompleteScript(String loadCompleteScript) {
+    public Asset setLoadCompleteScript(String loadCompleteScript) {
         this.loadCompleteScript = loadCompleteScript;
         return this;
     }
@@ -116,7 +123,7 @@ public class Crawl {
      * @param loginNodeUrl Login Node Url
      * @return Crawl
      */
-    public Crawl setLoginNodeUrl(String loginNodeUrl) {
+    public Asset setLoginNodeUrl(String loginNodeUrl) {
         this.loginNodeUrl = loginNodeUrl;
         return this;
     }
@@ -134,7 +141,7 @@ public class Crawl {
      * @param nodes Nodes
      * @return Crawl
      */
-    public Crawl setNodes(ForeignCollection<Node> nodes) {
+    public Asset setNodes(ForeignCollection<Node> nodes) {
         this.nodes = nodes;
         return this;
     }
@@ -144,7 +151,7 @@ public class Crawl {
      * @param node Node
      * @return Crawl
      */
-    public Crawl addNode(Node node) {
+    public Asset addNode(Node node) {
         nodes.add(node);
         return this;
     }
@@ -154,7 +161,7 @@ public class Crawl {
      * @param node Node
      * @return Crawl
      */
-    public Crawl removeNode(Node node) {
+    public Asset removeNode(Node node) {
         nodes.remove(node);
         return this;
     }
