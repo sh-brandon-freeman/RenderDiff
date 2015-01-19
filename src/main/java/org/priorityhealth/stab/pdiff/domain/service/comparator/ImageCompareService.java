@@ -38,10 +38,10 @@ public class ImageCompareService {
         try {
             compare.run(op);
         } catch (InterruptedException ex) {
-            LogService.Info("InterruptedException" + ex.getMessage());
+            LogService.Info(ImageCompareService.class, "InterruptedException" + ex.getMessage());
             ex.printStackTrace();
         } catch (IOException ex) {
-            LogService.Info("IOException" + ex.getMessage());
+            LogService.Info(ImageCompareService.class, "IOException" + ex.getMessage());
             ex.printStackTrace();
         } catch (IM4JavaException ex) {
             // Exception if the images are different.

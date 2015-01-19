@@ -23,7 +23,7 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
 
         try {
             Method method = this.getClass().getDeclaredMethod(methodName);
-            LogService.Info("Calling: " + method.getName());
+            LogService.Info(this, "Calling: " + method.getName());
             return method.invoke(this);
         } catch (NoSuchMethodException ex) {
             ex.printStackTrace();
@@ -68,7 +68,7 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
     }
 
     public MainController getMainController() {
-        LogService.Info("Creating MainController");
+        LogService.Info(this, "Creating MainController");
         return new MainController(this);
     }
 }

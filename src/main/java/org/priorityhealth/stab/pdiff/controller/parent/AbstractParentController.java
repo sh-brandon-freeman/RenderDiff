@@ -45,7 +45,7 @@ abstract public class AbstractParentController implements Initializable {
 
     public boolean unloadScreen(String name) {
         if(screens.remove(name) == null) {
-            LogService.Info("Screen didn't exist");
+            LogService.Info(this, "Screen didn't exist");
             return false;
         } else {
             return true;

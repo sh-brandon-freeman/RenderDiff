@@ -67,7 +67,7 @@ public class MainController extends AbstractParentController {
             }
             return true;
         } else {
-            LogService.Info("screen hasn't been loaded!\n");
+            LogService.Info(this, "screen hasn't been loaded!\n");
             return false;
         }
     }

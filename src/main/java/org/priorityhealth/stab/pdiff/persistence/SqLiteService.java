@@ -29,8 +29,8 @@ public class SqLiteService {
             while(rs.next())
             {
                 // read the result set
-                LogService.Info("name = " + rs.getString("name"));
-                LogService.Info("id = " + rs.getInt("id"));
+                LogService.Info(this, "name = " + rs.getString("name"));
+                LogService.Info(this, "id = " + rs.getInt("id"));
             }
 
         } catch (ClassNotFoundException ex) {

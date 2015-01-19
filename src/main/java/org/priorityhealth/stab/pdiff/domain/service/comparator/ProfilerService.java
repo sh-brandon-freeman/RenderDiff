@@ -1,5 +1,6 @@
 package org.priorityhealth.stab.pdiff.domain.service.comparator;
 
+import com.j256.ormlite.dao.ForeignCollection;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,6 +24,7 @@ import org.priorityhealth.stab.pdiff.domain.entity.asset.Node;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.StateRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.service.general.ImageService;
 import org.priorityhealth.stab.pdiff.service.LogService;
+import org.priorityhealth.stab.pdiff.view.service.UrlMonitoringService;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -56,6 +58,8 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
 
     protected List<Node> queue;
     protected int queueIndex;
+
+    protected boolean usingAlternateNodeList = false;
 
     /**
      *
@@ -94,14 +98,14 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
         webEngine.getLoadWorker().exceptionProperty().addListener(new ChangeListener<Throwable>() {
             @Override
             public void changed(ObservableValue<? extends Throwable> ov, Throwable t, Throwable t1) {
-                LogService.Info("Received exception: " + t1.getMessage());
+                LogService.Info(this, "Received exception: " + t1.getMessage());
             }
         });
     }
 
     public void begin() {
         if (asset == null) {
-            LogService.Info("There was no asset to profile.");
+            LogService.Info(this, "There was no asset to profile.");
             return;
         }
 
@@ -114,10 +118,12 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
             return;
         }
 
-        queue = new ArrayList<Node>();
-        queue.addAll(asset.getNodes());
+        if (!usingAlternateNodeList) {
+            queue = new ArrayList<Node>();
+            queue.addAll(asset.getNodes());
+        }
 
-        LogService.Info("Run ID: " + profile.getId());
+        LogService.Info(this, "Run ID: " + profile.getId());
 
         if (asset.getLoginNodeUrl() != null && asset.getLoginNodeUrl().length() > 0) {
             loadDocument(asset.getLoginNodeUrl());
@@ -126,13 +132,19 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
         }
     }
 
+    public void setAlternateNodeList(ForeignCollection<Node> nodes) {
+        queue = new ArrayList<Node>();
+        queue.addAll(nodes);
+        usingAlternateNodeList = true;
+    }
+
     private double setDocumentHeight() {
         String heightText = webView.getEngine().executeScript(
                 "window.getComputedStyle(document.body, null).getPropertyValue('height')"
         ).toString();
         Double newHeight = Math.ceil(Double.valueOf(heightText.replace("px", "")));
 
-        LogService.Info("New page height: " + newHeight);
+        LogService.Info(this, "New page height: " + newHeight);
 
         if (newHeight < 100) {
             newHeight = 100d;
@@ -154,20 +166,21 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
     public void onPageLoadSuccess() {
 
         boolean isFinished = false;
+
         if (asset.getLoadCompleteScript() != null && asset.getLoadCompleteScript().length() > 0) {
             try {
-                System.out.print("Has the page finished? ");
+                LogService.Info(this, "Has the page finished? ");
                 isFinished = (Boolean) webEngine.executeScript(asset.getLoadCompleteScript());
             } catch (JSException ex) {
-                LogService.Info("JSException: " + ex.getMessage());
+                LogService.Info(this, "JSException: " + ex.getMessage());
             }
         } else {
-            LogService.Info("There was no completion script.");
+            LogService.Info(this, "There was no completion script.");
             isFinished = true;
         }
 
         if (!isFinished) {
-            LogService.Info("Nope. Waiting " + (waitTime / 1000) + "s ...");
+            LogService.Info(this, "Nope. Waiting " + (waitTime / 1000) + "s ...");
             PauseTransition pause = new PauseTransition(Duration.millis(waitTime));
             pause.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
@@ -177,7 +190,7 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
             });
             pause.play();
         } else {
-            LogService.Info("Yes!");
+            LogService.Info(this, "Yes!");
 
             setDocumentHeight();
 
@@ -198,7 +211,7 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
      */
     @Override
     public void handleStall() {
-        LogService.Info("Reloading: " + currentUrl);
+        LogService.Info(this, "Reloading: " + currentUrl);
         webEngine.reload();
     }
 
@@ -209,13 +222,13 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
     public void loadDocument(final String url) {
         this.currentUrl = url;
         this.urlHash = DigestService.getSHA1(currentUrl.getBytes());
-        LogService.Info("Loading: " + currentUrl);
+        LogService.Info(this, "Loading: " + currentUrl);
         webEngine.load(url);
     }
 
     public void loadNextNode()
     {
-        LogService.Info("Loading Next Node");
+        LogService.Info(this, "Loading Next Node");
         if (queue.size() > queueIndex) {
             currentNode = queue.get(queueIndex);
             queueIndex++;
@@ -232,7 +245,7 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
     }
 
     protected void onProfileComplete() {
-        LogService.Info("Persisting profile");
+        LogService.Info(this, "Persisting profile");
         this.profile.setComplete(true);
         try {
             profileRepository.update(this.profile);
@@ -246,11 +259,11 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
      */
     private void recordVisualState() {
         if (currentNode == null) {
-            LogService.Info("No asset to compare.");
+            LogService.Info(this, "No node to record.");
             return;
         }
 
-        LogService.Info("Recording visual state of node: " + currentNode.getUrl());
+        LogService.Info(this, "Recording visual state of node: " + currentNode.getUrl());
 
         String imageStorePath = storePath + File.separator + profile.getId() + File.separator + urlHash + ".png";
 
@@ -276,7 +289,7 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
             url = url.substring(asset.getDomain().length());
         }
 
-        System.out.print("Checking queue for: " + url + " ... ");
+        LogService.Info(this, "Checking queue for: " + url + " ... ");
 
         boolean found = false;
         for (Node node : asset.getNodes()) {
@@ -286,7 +299,7 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
             }
         }
         if (!found) {
-            LogService.Info("Not Found ... adding.");
+            LogService.Info(this, "Not Found ... adding.");
             Node newNode = new Node();
             newNode
                     .setUrl(url)
@@ -295,7 +308,7 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
             asset.addNode(newNode);
             queue.add(newNode);
         } else {
-            LogService.Info("Found");
+            LogService.Info(this, "Found");
         }
     }
 
@@ -303,9 +316,11 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
      *
      */
     public void processDocument() {
-        List<String> urlList = ParserService.getLinks(webEngine);
-        for (String url : urlList) {
-            addUrlToCrawl(url);
+        if (!usingAlternateNodeList) {
+            List<String> urlList = ParserService.getLinks(webEngine);
+            for (String url : urlList) {
+                addUrlToCrawl(url);
+            }
         }
         recordVisualState();
         loadNextNode();

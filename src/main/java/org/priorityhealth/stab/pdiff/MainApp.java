@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 import org.priorityhealth.stab.pdiff.controller.ControllerFactory;
 import org.priorityhealth.stab.pdiff.controller.MainController;
 import org.priorityhealth.stab.pdiff.persistence.repository.RepositoryFactory;
+import org.priorityhealth.stab.pdiff.view.web.UrlMonitoringStreamHandlerFactory;
+
+import java.net.URL;
 
 public class MainApp extends Application {
 
@@ -19,13 +22,14 @@ public class MainApp extends Application {
      */
     @Override
     public void start(final Stage stage) throws Exception {
+
+        URL.setURLStreamHandlerFactory(new UrlMonitoringStreamHandlerFactory());
+
         Class.forName("org.sqlite.JDBC");
         ConnectionSource connectionSource = new JdbcConnectionSource("jdbc:sqlite:sample.db");
 
         RepositoryFactory repositoryFactory = new RepositoryFactory(connectionSource);
         ControllerFactory controllerFactory = new ControllerFactory(repositoryFactory);
-
-        MainController mainController = new MainController(controllerFactory);
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/main.fxml"));
         fxmlLoader.setControllerFactory(controllerFactory);

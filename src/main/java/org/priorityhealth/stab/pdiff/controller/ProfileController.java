@@ -1,7 +1,5 @@
 package org.priorityhealth.stab.pdiff.controller;
 
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.support.ConnectionSource;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,21 +7,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.web.WebView;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 import org.priorityhealth.stab.pdiff.controller.stacked.AbstractStackedController;
 import org.priorityhealth.stab.pdiff.domain.repository.asset.AssetRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.asset.NodeRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.ProfileRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.StateRepositoryInterface;
-import org.priorityhealth.stab.pdiff.persistence.repository.asset.AssetRepository;
-import org.priorityhealth.stab.pdiff.persistence.repository.asset.NodeRepository;
-import org.priorityhealth.stab.pdiff.persistence.repository.profile.ProfileRepository;
-import org.priorityhealth.stab.pdiff.persistence.repository.profile.StateRepository;
-import org.priorityhealth.stab.pdiff.persistence.repository.test.TypeRepository;
 import org.priorityhealth.stab.pdiff.domain.service.general.DateTimeService;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
-import org.priorityhealth.stab.pdiff.persistence.repository.test.TestRepository;
 import org.priorityhealth.stab.pdiff.domain.service.comparator.ProfilerService;
 import org.priorityhealth.stab.pdiff.service.LogService;
 import org.priorityhealth.stab.pdiff.view.converter.AssetStringConverter;
@@ -78,20 +68,27 @@ public class ProfileController extends AbstractStackedController implements Init
             @Override
             public void handle(ActionEvent e) {
                 Asset asset = cbAsset1.getValue();
-                if (asset != null) {
-                    final ProfilerService profilerService = new ProfilerService(
-                            wvProfile1,
-                            asset,
-                            System.getProperty("user.home") + File.separator + "pdiff" +
-                                    File.separator + DateTimeService.getTimestamp("yyyy_MM_dd_HH_mm_ss"),
-                            assetRepository,
-                            nodeRepository,
-                            stateRepository,
-                            profileRepository
-                    );
 
-                    profilerService.begin();
+                Asset nodeListAsset = cbAsset2.getValue();
+
+                LogService.Info(this, "Beginning Profile for: " + asset.getName());
+                ProfilerService profilerService = new ProfilerService(
+                        wvProfile1,
+                        asset,
+                        System.getProperty("user.home") + File.separator + "pdiff" +
+                                File.separator + DateTimeService.getTimestamp("yyyy_MM_dd_HH_mm_ss"),
+                        assetRepository,
+                        nodeRepository,
+                        stateRepository,
+                        profileRepository
+                );
+
+                if (nodeListAsset != null) {
+                    LogService.Info(this, "Using alternate node list from " + nodeListAsset.getName());
+                    profilerService.setAlternateNodeList(nodeListAsset.getNodes());
                 }
+
+                profilerService.begin();
             }
         });
 
@@ -112,7 +109,7 @@ public class ProfileController extends AbstractStackedController implements Init
             cbAsset1.setItems(FXCollections.observableArrayList(assets));
             cbAsset2.setItems(FXCollections.observableArrayList(assets));
         } else {
-            LogService.Info("There were no assets");
+            LogService.Info(this, "There were no assets");
         }
     }
 }

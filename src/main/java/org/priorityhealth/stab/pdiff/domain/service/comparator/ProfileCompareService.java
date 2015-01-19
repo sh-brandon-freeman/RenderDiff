@@ -14,7 +14,7 @@ public class ProfileCompareService {
 //
 //    private void compareVisualState(String crawlTimestamp, String basePath) {
 //        if (currentNode == null) {
-//            LogService.Info("No asset to compare.");
+//            LogService.Info(this, "No asset to compare.");
 //            return;
 //        }
 //
@@ -75,12 +75,12 @@ public class ProfileCompareService {
 //                }
 //                resultRepository.create(nodeState);
 //            } catch (IOException ex) {
-//                LogService.Info("IOException" + ex.getMessage());
+//                LogService.Info(this, "IOException" + ex.getMessage());
 //            } catch (SQLException ex) {
 //                ex.printStackTrace();
 //            }
 //        } else {
-//            LogService.Info("No known state file found");
+//            LogService.Info(this, "No known state file found");
 //        }
 //    }
 }

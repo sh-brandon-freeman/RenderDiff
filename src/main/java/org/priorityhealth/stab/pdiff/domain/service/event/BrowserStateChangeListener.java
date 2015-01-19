@@ -20,7 +20,7 @@ public class BrowserStateChangeListener implements ChangeListener<Worker.State> 
 
     @Override
     public void changed(ObservableValue observable, Worker.State oldState, Worker.State newState) {
-        LogService.Info("Browser State: " + observable.getValue().toString());
+        LogService.Info(this, "Browser State: " + observable.getValue().toString());
         switch (newState) {
             case READY:
                 createReadyTimer();
@@ -43,7 +43,7 @@ public class BrowserStateChangeListener implements ChangeListener<Worker.State> 
                         throw new Throwable("Unknown error.");
                     }
                 } catch (Throwable ex) {
-                    LogService.Info("Error: " + ex.getMessage());
+                    LogService.Info(this, "Error: " + ex.getMessage());
                 }
                 break;
         }
@@ -53,7 +53,7 @@ public class BrowserStateChangeListener implements ChangeListener<Worker.State> 
         stallTask = new Task<Void>() {
             @Override
             public Void call() {
-                LogService.Info("Starting stall timer.");
+                LogService.Info(this, "Starting stall timer.");
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException interrupted) {
@@ -65,20 +65,20 @@ public class BrowserStateChangeListener implements ChangeListener<Worker.State> 
             @Override
             protected void succeeded() {
                 super.succeeded();
-                LogService.Info("Browser Stalled.");
+                LogService.Info(this, "Browser Stalled.");
                 browserStateChangeHandler.handleStall();
             }
 
             @Override
             protected void cancelled() {
                 super.cancelled();
-                LogService.Info("Stall timer cancelled.");
+                LogService.Info(this, "Stall timer cancelled.");
             }
 
             @Override
             protected void failed() {
                 super.failed();
-                LogService.Info("Stall timer failed.");
+                LogService.Info(this, "Stall timer failed.");
             }
         };
 
