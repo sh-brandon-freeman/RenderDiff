@@ -59,7 +59,9 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
             return new TestController(
                     repositoryFactory.getAssetRepository(),
                     repositoryFactory.getProfileRepository(),
-                    repositoryFactory.getStateRepository()
+                    repositoryFactory.getStateRepository(),
+                    repositoryFactory.getResultRepository(),
+                    repositoryFactory.getTestRepository()
             );
         } catch (SQLException ex) {
             ex.printStackTrace();

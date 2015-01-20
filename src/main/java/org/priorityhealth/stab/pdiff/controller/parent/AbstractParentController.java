@@ -33,7 +33,6 @@ abstract public class AbstractParentController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewName));
             fxmlLoader.setControllerFactory(controllerFactory);
-            //fxmlLoader.setController(stackedController);
             Parent loadScreen = fxmlLoader.load();
             screens.put(name, loadScreen);
             return true;

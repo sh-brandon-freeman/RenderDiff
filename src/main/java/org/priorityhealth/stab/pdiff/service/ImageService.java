@@ -1,10 +1,10 @@
-package org.priorityhealth.stab.pdiff.domain.service.general;
+package org.priorityhealth.stab.pdiff.service;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.web.WebView;
-import org.priorityhealth.stab.pdiff.service.LogService;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -107,5 +107,21 @@ public class ImageService {
         );
 
         return resizedImage;
+    }
+
+    public static WritableImage loadWritableImageFromFile(String path) {
+        BufferedImage bufferedImage = loadBufferedImageFromFile(path);
+
+        WritableImage writableImage = null;
+        if (bufferedImage != null) {
+            writableImage = new WritableImage(bufferedImage.getWidth(), bufferedImage.getHeight());
+            PixelWriter pw = writableImage.getPixelWriter();
+            for (int x = 0; x < bufferedImage.getWidth(); x++) {
+                for (int y = 0; y < bufferedImage.getHeight(); y++) {
+                    pw.setArgb(x, y, bufferedImage.getRGB(x, y));
+                }
+            }
+        }
+        return writableImage;
     }
 }

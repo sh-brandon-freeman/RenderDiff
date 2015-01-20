@@ -1,6 +1,4 @@
-package org.priorityhealth.stab.pdiff.domain.service.general;
-
-import org.priorityhealth.stab.pdiff.service.LogService;
+package org.priorityhealth.stab.pdiff.service;
 
 import java.io.*;
 

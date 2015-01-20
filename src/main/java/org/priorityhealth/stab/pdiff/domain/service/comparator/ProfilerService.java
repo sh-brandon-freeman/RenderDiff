@@ -17,14 +17,13 @@ import org.priorityhealth.stab.pdiff.domain.repository.asset.NodeRepositoryInter
 import org.priorityhealth.stab.pdiff.domain.repository.profile.ProfileRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.service.event.BrowserStateChangeHandlerInterface;
 import org.priorityhealth.stab.pdiff.domain.service.event.BrowserStateChangeListener;
-import org.priorityhealth.stab.pdiff.domain.service.general.DigestService;
+import org.priorityhealth.stab.pdiff.service.DigestService;
 import org.priorityhealth.stab.pdiff.domain.service.html.ParserService;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Node;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.StateRepositoryInterface;
-import org.priorityhealth.stab.pdiff.domain.service.general.ImageService;
+import org.priorityhealth.stab.pdiff.service.ImageService;
 import org.priorityhealth.stab.pdiff.service.LogService;
-import org.priorityhealth.stab.pdiff.view.service.UrlMonitoringService;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -60,6 +59,7 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
     protected int queueIndex;
 
     protected boolean usingAlternateNodeList = false;
+    protected boolean crawlNewNodes = true;
 
     /**
      *
@@ -121,6 +121,8 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
         if (!usingAlternateNodeList) {
             queue = new ArrayList<Node>();
             queue.addAll(asset.getNodes());
+        } else {
+            crawlNewNodes = false;
         }
 
         LogService.Info(this, "Run ID: " + profile.getId());
@@ -136,6 +138,10 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
         queue = new ArrayList<Node>();
         queue.addAll(nodes);
         usingAlternateNodeList = true;
+    }
+
+    public void setCrawlNewNodes(boolean crawl) {
+        crawlNewNodes = crawl;
     }
 
     private double setDocumentHeight() {
@@ -316,7 +322,7 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
      *
      */
     public void processDocument() {
-        if (!usingAlternateNodeList) {
+        if (crawlNewNodes) {
             List<String> urlList = ParserService.getLinks(webEngine);
             for (String url : urlList) {
                 addUrlToCrawl(url);

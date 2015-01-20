@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:controller="org.priorityhealth.stab.pdiff.controller.TestController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.priorityhealth.stab.pdiff.controller.TestController">
    <center>
       <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <items>
@@ -19,25 +20,34 @@
                   <Button fx:id="btnCompare" mnemonicParsing="false" text="Compare" />
                </children>
             </VBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
-                     <content>
-                        <ImageView fx:id="ivKnown" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                     </content>
-                  </ScrollPane>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
-                     <content>
-                        <ImageView fx:id="ivDiff" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                     </content>
-                  </ScrollPane>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
-                     <content>
-                        <ImageView fx:id="ivCurrent" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                     </content>
-                  </ScrollPane>
-               </children>
-            </HBox>
+            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+               <items>
+                  <AnchorPane>
+                     <children>
+                        <HBox fx:id="hBox" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <ScrollPane fx:id="spKnown" prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <ImageView fx:id="ivKnown" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="spDiff" prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <ImageView fx:id="ivDiff" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="spCurrent" prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <ImageView fx:id="ivCurrent" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+                  <ListView fx:id="lvResults" prefHeight="200.0" prefWidth="200.0" />
+               </items>
+            </SplitPane>
          </items>
       </SplitPane>
    </center>

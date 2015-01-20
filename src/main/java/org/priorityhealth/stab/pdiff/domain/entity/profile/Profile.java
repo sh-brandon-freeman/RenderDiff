@@ -20,7 +20,7 @@ public class Profile {
     /**
      * States
      */
-    @ForeignCollectionField(eager = false)
+    @ForeignCollectionField(eager = true)
     protected ForeignCollection<State> states;
 
     @DatabaseField

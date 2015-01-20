@@ -1,4 +1,4 @@
-package org.priorityhealth.stab.pdiff.domain.service.general;
+package org.priorityhealth.stab.pdiff.service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

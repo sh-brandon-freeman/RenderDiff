@@ -12,7 +12,7 @@ import org.priorityhealth.stab.pdiff.domain.repository.asset.AssetRepositoryInte
 import org.priorityhealth.stab.pdiff.domain.repository.asset.NodeRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.ProfileRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.StateRepositoryInterface;
-import org.priorityhealth.stab.pdiff.domain.service.general.DateTimeService;
+import org.priorityhealth.stab.pdiff.service.DateTimeService;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
 import org.priorityhealth.stab.pdiff.domain.service.comparator.ProfilerService;
 import org.priorityhealth.stab.pdiff.service.LogService;
@@ -22,6 +22,7 @@ import org.priorityhealth.stab.pdiff.view.factory.AssetCellFactory;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -38,16 +39,16 @@ public class ProfileController extends AbstractStackedController implements Init
     private Button btnProfile;
 
     @FXML
-    private WebView wvProfile1;
+    private WebView wvProfile;
 
     @FXML
-    private WebView wvProfile2;
+    private ComboBox<Asset> cbAssetProfile;
 
     @FXML
-    private ComboBox<Asset> cbAsset1;
+    private ComboBox<Asset> cbAssetNodes;
 
     @FXML
-    private ComboBox<Asset> cbAsset2;
+    private CheckBox chkCrawl;
 
     public ProfileController (
             AssetRepositoryInterface assetRepository,
@@ -67,13 +68,13 @@ public class ProfileController extends AbstractStackedController implements Init
         btnProfile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Asset asset = cbAsset1.getValue();
+                Asset asset = cbAssetProfile.getValue();
 
-                Asset nodeListAsset = cbAsset2.getValue();
+                Asset nodeListAsset = cbAssetNodes.getValue();
 
                 LogService.Info(this, "Beginning Profile for: " + asset.getName());
                 ProfilerService profilerService = new ProfilerService(
-                        wvProfile1,
+                        wvProfile,
                         asset,
                         System.getProperty("user.home") + File.separator + "pdiff" +
                                 File.separator + DateTimeService.getTimestamp("yyyy_MM_dd_HH_mm_ss"),
@@ -88,16 +89,20 @@ public class ProfileController extends AbstractStackedController implements Init
                     profilerService.setAlternateNodeList(nodeListAsset.getNodes());
                 }
 
+                if (!chkCrawl.isSelected()) {
+                    profilerService.setCrawlNewNodes(false);
+                }
+
                 profilerService.begin();
             }
         });
 
-        wvProfile1.setPrefWidth(1000);
+        wvProfile.setPrefWidth(1000);
 
-        cbAsset1.setCellFactory(new AssetCellFactory());
-        cbAsset2.setCellFactory(new AssetCellFactory());
-        cbAsset1.setConverter(new AssetStringConverter());
-        cbAsset2.setConverter(new AssetStringConverter());
+        cbAssetProfile.setCellFactory(new AssetCellFactory());
+        cbAssetNodes.setCellFactory(new AssetCellFactory());
+        cbAssetProfile.setConverter(new AssetStringConverter());
+        cbAssetNodes.setConverter(new AssetStringConverter());
 
         List<Asset> assets = null;
         try {
@@ -106,10 +111,25 @@ public class ProfileController extends AbstractStackedController implements Init
             ex.printStackTrace();
         }
         if (assets != null) {
-            cbAsset1.setItems(FXCollections.observableArrayList(assets));
-            cbAsset2.setItems(FXCollections.observableArrayList(assets));
+            cbAssetProfile.setItems(FXCollections.observableArrayList(assets));
+            cbAssetNodes.setItems(FXCollections.observableArrayList(assets));
         } else {
             LogService.Info(this, "There were no assets");
         }
+
+        cbAssetNodes.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Asset asset = cbAssetNodes.getValue();
+                if (asset != null) {
+                    chkCrawl.setSelected(false);
+                    chkCrawl.setDisable(true);
+                } else {
+                    chkCrawl.setSelected(true);
+                    chkCrawl.setDisable(false);
+                }
+
+            }
+        });
     }
 }

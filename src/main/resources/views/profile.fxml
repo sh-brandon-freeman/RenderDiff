@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:controller="org.priorityhealth.stab.pdiff.controller.ProfileController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.priorityhealth.stab.pdiff.controller.ProfileController">
    <center>
       <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <items>
@@ -16,8 +16,11 @@
                <center>
                   <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                      <children>
-                        <ComboBox fx:id="cbAsset1" prefWidth="150.0" />
-                        <ComboBox fx:id="cbAsset2" prefWidth="150.0" />
+                        <Label text="Asset to Profile" />
+                        <ComboBox fx:id="cbAssetProfile" prefWidth="150.0" />
+                        <Label text="Use Nodes From ..." />
+                        <ComboBox fx:id="cbAssetNodes" prefWidth="150.0" />
+                        <CheckBox fx:id="chkCrawl" mnemonicParsing="false" text="Crawl New Nodes?" />
                      </children>
                   </VBox>
                </center>
@@ -30,7 +33,7 @@
                            <children>
                               <ScrollPane prefHeight="200.0" prefWidth="200.0">
                                  <content>
-                                    <WebView fx:id="wvProfile1" prefHeight="200.0" prefWidth="200.0" />
+                                    <WebView fx:id="wvProfile" prefHeight="200.0" prefWidth="200.0" />
                                  </content>
                               </ScrollPane>
                               <Pane opacity="0.0" prefHeight="200.0" prefWidth="200.0" />
@@ -38,15 +41,6 @@
                         </StackPane>
                      </content>
                   </Tab>
-                <Tab text="Untitled Tab 2">
-                     <content>
-                        <ScrollPane prefHeight="200.0" prefWidth="200.0">
-                           <content>
-                              <WebView fx:id="wvProfile2" prefHeight="200.0" prefWidth="200.0" />
-                           </content>
-                        </ScrollPane>
-                     </content>
-                </Tab>
               </tabs>
             </TabPane>
          </items>

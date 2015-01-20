@@ -15,7 +15,7 @@ public class State {
     @DatabaseField(generatedId = true)
     protected int id;
 
-    @DatabaseField(canBeNull = false, foreign = true)
+    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh=true, maxForeignAutoRefreshLevel=3)
     protected Node node;
 
     @DatabaseField(canBeNull = false, foreign = true)

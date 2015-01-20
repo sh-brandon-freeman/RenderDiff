@@ -6,10 +6,8 @@ import org.priorityhealth.stab.pdiff.persistence.repository.asset.NodeRepository
 import org.priorityhealth.stab.pdiff.persistence.repository.profile.ProfileRepository;
 import org.priorityhealth.stab.pdiff.persistence.repository.profile.StateRepository;
 import org.priorityhealth.stab.pdiff.persistence.repository.test.TestRepository;
-import org.priorityhealth.stab.pdiff.persistence.repository.test.TypeRepository;
+import org.priorityhealth.stab.pdiff.persistence.repository.test.ResultRepository;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 
 public class RepositoryFactory {
@@ -20,7 +18,7 @@ public class RepositoryFactory {
     protected StateRepository stateRepository;
     protected ProfileRepository profileRepository;
     protected TestRepository testRepository;
-    protected TypeRepository typeRepository;
+    protected ResultRepository resultRepository;
 
 
     public RepositoryFactory(ConnectionSource connectionSource) {
@@ -78,10 +76,19 @@ public class RepositoryFactory {
         return testRepository;
     }
 
-    public TypeRepository getTypeRepository() throws SQLException {
-        if (typeRepository == null) {
-            typeRepository = new TypeRepository(connectionSource);
+    public ResultRepository getResultRepository() throws SQLException {
+        if (resultRepository == null) {
+            resultRepository = new ResultRepository(connectionSource);
         }
-        return typeRepository;
+        return resultRepository;
+    }
+
+    public void buildStructure() throws SQLException {
+        getResultRepository().createTable();
+        getTestRepository().createTable();
+        getStateRepository().createTable();
+        getProfileRepository().createTable();
+        getNodeRepository().createTable();
+        getAssetRepository().createTable();
     }
 }
