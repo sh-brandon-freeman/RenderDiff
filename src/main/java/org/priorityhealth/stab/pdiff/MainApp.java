@@ -7,8 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.priorityhealth.stab.pdiff.controller.ControllerFactory;
-import org.priorityhealth.stab.pdiff.controller.MainController;
+import org.priorityhealth.stab.pdiff.controller.factory.ControllerFactory;
 import org.priorityhealth.stab.pdiff.persistence.repository.RepositoryFactory;
 import org.priorityhealth.stab.pdiff.view.web.UrlMonitoringStreamHandlerFactory;
 

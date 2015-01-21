@@ -2,6 +2,7 @@ package org.priorityhealth.stab.pdiff.domain.entity.profile;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.priorityhealth.stab.pdiff.domain.entity.AbstractEntity;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Node;
 
 import java.util.Date;
@@ -10,7 +11,7 @@ import java.util.Date;
  * Result
  */
 @DatabaseTable(tableName = "profile.states")
-public class State {
+public class State extends AbstractEntity {
 
     @DatabaseField(generatedId = true)
     protected int id;

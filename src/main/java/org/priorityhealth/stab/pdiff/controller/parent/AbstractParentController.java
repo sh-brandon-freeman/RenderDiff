@@ -4,10 +4,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import org.priorityhealth.stab.pdiff.controller.ControllerFactory;
+import org.priorityhealth.stab.pdiff.controller.factory.ControllerFactory;
 import org.priorityhealth.stab.pdiff.controller.stacked.AbstractStackedController;
-import org.priorityhealth.stab.pdiff.controller.stacked.StackedControllerInterface;
-import org.priorityhealth.stab.pdiff.persistence.repository.RepositoryFactory;
 import org.priorityhealth.stab.pdiff.service.LogService;
 
 import java.io.IOException;

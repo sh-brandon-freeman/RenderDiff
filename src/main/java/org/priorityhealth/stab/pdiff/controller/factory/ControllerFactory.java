@@ -1,6 +1,10 @@
-package org.priorityhealth.stab.pdiff.controller;
+package org.priorityhealth.stab.pdiff.controller.factory;
 
 import javafx.util.Callback;
+import org.priorityhealth.stab.pdiff.controller.AssetController;
+import org.priorityhealth.stab.pdiff.controller.MainController;
+import org.priorityhealth.stab.pdiff.controller.ProfileController;
+import org.priorityhealth.stab.pdiff.controller.TestController;
 import org.priorityhealth.stab.pdiff.persistence.repository.RepositoryFactory;
 import org.priorityhealth.stab.pdiff.service.LogService;
 
@@ -62,6 +66,18 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
                     repositoryFactory.getStateRepository(),
                     repositoryFactory.getResultRepository(),
                     repositoryFactory.getTestRepository()
+            );
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public AssetController getAssetController() {
+        try {
+            return new AssetController(
+                    repositoryFactory.getAssetRepository(),
+                    repositoryFactory.getNodeRepository()
             );
         } catch (SQLException ex) {
             ex.printStackTrace();

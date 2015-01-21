@@ -4,13 +4,14 @@ import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.priorityhealth.stab.pdiff.domain.entity.AbstractEntity;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.Profile;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.State;
 
 import java.util.Date;
 
 @DatabaseTable(tableName = "test.tests")
-public class Test {
+public class Test extends AbstractEntity {
 
     @DatabaseField(generatedId = true)
     protected int id;

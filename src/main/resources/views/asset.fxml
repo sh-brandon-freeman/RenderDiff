@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane dividerPositions="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.priorityhealth.stab.pdiff.controller.AssetController">
+   <items>
+      <VBox maxWidth="270.0" minWidth="270.0" prefWidth="270.0" SplitPane.resizableWithParent="false">
+         <children>
+            <HBox prefHeight="16.0" prefWidth="265.0">
+               <children>
+                  <Button fx:id="btnAddAsset" mnemonicParsing="false" text="Add" />
+                  <Button fx:id="btnCloneAsset" disable="true" mnemonicParsing="false" text="Clone">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnDelete" mnemonicParsing="false" text="Delete">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets left="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <HBox prefHeight="28.0" prefWidth="295.0">
+               <children>
+                  <Label prefWidth="110.0" text="Asset">
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+                  <ComboBox fx:id="cbAssets" prefWidth="150.0" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="26.0" prefWidth="267.0">
+               <children>
+                  <Label prefWidth="110.0" text="Name">
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtName" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="38.0" prefHeight="13.0" prefWidth="295.0">
+               <children>
+                  <Label prefWidth="110.0" text="Domain">
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtDomain" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="64.0" prefHeight="13.0" prefWidth="295.0">
+               <children>
+                  <Label prefWidth="110.0" text="Complete Script">
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtScript" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="90.0" prefHeight="13.0" prefWidth="295.0">
+               <children>
+                  <Label prefWidth="110.0" text="Login URL">
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtLogin" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <Button fx:id="btnSave" disable="true" mnemonicParsing="false" text="Save" />
+         </children>
+         <padding>
+            <Insets left="5.0" />
+         </padding>
+      </VBox>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <center>
+            <ListView fx:id="lvNodes" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </center>
+         <top>
+            <HBox prefHeight="17.0" prefWidth="295.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="Add">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="txtAdd" />
+                  <Button fx:id="btnAdd" mnemonicParsing="false" text="Button">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin></Button>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </BorderPane.margin>
+            </HBox>
+         </top>
+      </BorderPane>
+   </items>
+</SplitPane>

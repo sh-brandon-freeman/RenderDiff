@@ -4,12 +4,13 @@ import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.priorityhealth.stab.pdiff.domain.entity.AbstractEntity;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
 
 import java.util.Date;
 
 @DatabaseTable(tableName = "profile.profiles")
-public class Profile {
+public class Profile extends AbstractEntity {
 
     @DatabaseField(generatedId = true)
     protected int id;

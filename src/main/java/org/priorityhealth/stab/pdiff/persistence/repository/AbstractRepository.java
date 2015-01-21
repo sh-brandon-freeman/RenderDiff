@@ -2,6 +2,7 @@ package org.priorityhealth.stab.pdiff.persistence.repository;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import org.priorityhealth.stab.pdiff.domain.repository.AbstractRepositoryInterface;
@@ -48,5 +49,9 @@ abstract public class AbstractRepository<T> implements AbstractRepositoryInterfa
 
     public void createTable() throws SQLException{
         TableUtils.createTable(connectionSource, genericClass);
+    }
+
+    public Dao<T, String> getDao() {
+        return dao;
     }
 }

@@ -2,12 +2,13 @@ package org.priorityhealth.stab.pdiff.domain.entity.test;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.priorityhealth.stab.pdiff.domain.entity.AbstractEntity;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.State;
 
 import java.util.Date;
 
 @DatabaseTable(tableName = "test.results")
-public class Result {
+public class Result extends AbstractEntity {
 
     @DatabaseField(canBeNull = false, foreign = true)
     protected Test test;

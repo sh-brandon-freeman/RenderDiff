@@ -1,6 +1,5 @@
 package org.priorityhealth.stab.pdiff.view.web;
 
-import org.priorityhealth.stab.pdiff.view.service.UrlMonitoringService;
 import sun.net.www.protocol.http.Handler;
 
 import java.io.IOException;

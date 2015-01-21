@@ -6,18 +6,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
+import org.priorityhealth.stab.pdiff.controller.factory.ControllerFactory;
 import org.priorityhealth.stab.pdiff.controller.parent.AbstractParentController;
-import org.priorityhealth.stab.pdiff.persistence.repository.RepositoryFactory;
+import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
 import org.priorityhealth.stab.pdiff.service.LogService;
-import sun.applet.Main;
 
-import javax.xml.stream.XMLReporter;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController extends AbstractParentController {
-
-    public static final String CONTROLLER_NAME = "MAIN";
 
     @FXML
     private AnchorPane anchorPane;
@@ -28,6 +25,9 @@ public class MainController extends AbstractParentController {
     @FXML
     private MenuItem menuTest;
 
+    @FXML
+    private MenuItem menuAsset;
+
     public MainController(ControllerFactory controllerFactory) {
         super(controllerFactory);
     }
@@ -36,7 +36,14 @@ public class MainController extends AbstractParentController {
     public void initialize(URL location, ResourceBundle resources) {
         this.loadScreen(ProfileController.CONTROLLER_NAME, controllerFactory.getProfileController());
         this.loadScreen(TestController.CONTROLLER_NAME, controllerFactory.getTestController());
+        this.loadScreen(AssetController.CONTROLLER_NAME, controllerFactory.getAssetController());
 
+        menuAsset.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                setScreen(AssetController.CONTROLLER_NAME);
+            }
+        });
         menuProfile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {

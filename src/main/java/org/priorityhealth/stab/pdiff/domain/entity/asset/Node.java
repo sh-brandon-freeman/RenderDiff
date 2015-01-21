@@ -2,11 +2,12 @@ package org.priorityhealth.stab.pdiff.domain.entity.asset;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.priorityhealth.stab.pdiff.domain.entity.AbstractEntity;
 
 import java.util.Date;
 
 @DatabaseTable(tableName = "asset.nodes")
-public class Node {
+public class Node extends AbstractEntity {
 
     @DatabaseField(generatedId = true)
     protected int id;
