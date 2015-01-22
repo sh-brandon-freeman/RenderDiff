@@ -21,13 +21,13 @@ public class Asset extends AbstractEntity {
     /**
      * Name
      */
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     protected String name;
 
     /**
      * Domain
      */
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     protected String domain;
 
     /**
@@ -47,6 +47,15 @@ public class Asset extends AbstractEntity {
      */
     @ForeignCollectionField(eager = false)
     protected ForeignCollection<Node> nodes;
+
+    @DatabaseField
+    protected String loginServer;
+
+    @DatabaseField
+    protected String username;
+
+    @DatabaseField
+    protected String password;
 
     /**
      *
@@ -164,6 +173,33 @@ public class Asset extends AbstractEntity {
      */
     public Asset removeNode(Node node) {
         nodes.remove(node);
+        return this;
+    }
+
+    public String getLoginServer() {
+        return loginServer;
+    }
+
+    public Asset setLoginServer(String loginServer) {
+        this.loginServer = loginServer;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Asset setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Asset setPassword(String password) {
+        this.password = password;
         return this;
     }
 }

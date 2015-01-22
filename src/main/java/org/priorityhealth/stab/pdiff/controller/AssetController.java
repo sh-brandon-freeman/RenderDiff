@@ -9,8 +9,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.*;
 import org.priorityhealth.stab.pdiff.controller.stacked.AbstractStackedController;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Node;
@@ -23,7 +21,6 @@ import org.priorityhealth.stab.pdiff.view.factory.NodeCellFactory;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -50,7 +47,16 @@ public class AssetController extends AbstractStackedController implements Initia
     private TextField txtScript;
 
     @FXML
-    private TextField txtLogin;
+    private TextField txtLoginServer;
+
+    @FXML
+    private TextField txtUsername;
+
+    @FXML
+    private TextField txtPassword;
+
+    @FXML
+    private TextField txtLoginNode;
 
     @FXML
     private TextField txtAdd;
@@ -116,26 +122,16 @@ public class AssetController extends AbstractStackedController implements Initia
 
         txtName.textProperty().addListener(assetChangeListener);
         txtDomain.textProperty().addListener(assetChangeListener);
-        txtLogin.textProperty().addListener(assetChangeListener);
-        txtLogin.textProperty().addListener(assetChangeListener);
+        txtScript.textProperty().addListener(assetChangeListener);
+        txtLoginServer.textProperty().addListener(assetChangeListener);
+        txtUsername.textProperty().addListener(assetChangeListener);
+        txtPassword.textProperty().addListener(assetChangeListener);
+        txtLoginNode.textProperty().addListener(assetChangeListener);
 
         btnSave.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                selectedAsset.setName(txtName.getText());
-                selectedAsset.setDomain(txtDomain.getText());
-                selectedAsset.setLoginNodeUrl(txtLogin.getText());
-                selectedAsset.setLoadCompleteScript(txtScript.getText());
-                try {
-                    if (selectedAsset.getId() > 0) {
-                        assetRepository.update(selectedAsset);
-                    } else {
-                        assetRepository.create(selectedAsset);
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-                btnSave.setDisable(true);
+                saveSelectedAsset();
             }
         });
 
@@ -175,6 +171,26 @@ public class AssetController extends AbstractStackedController implements Initia
                 }
             }
         });
+    }
+
+    protected void saveSelectedAsset() {
+        selectedAsset.setName(txtName.getText());
+        selectedAsset.setDomain(txtDomain.getText());
+        selectedAsset.setLoadCompleteScript(txtScript.getText());
+        selectedAsset.setLoginServer(txtLoginServer.getText());
+        selectedAsset.setUsername(txtUsername.getText());
+        selectedAsset.setPassword(txtPassword.getText());
+        selectedAsset.setLoginNodeUrl(txtLoginNode.getText());
+        try {
+            if (selectedAsset.getId() > 0) {
+                assetRepository.update(selectedAsset);
+            } else {
+                assetRepository.create(selectedAsset);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        btnSave.setDisable(true);
     }
 
     protected void cloneSelectedAsset() {
@@ -237,12 +253,14 @@ public class AssetController extends AbstractStackedController implements Initia
 
     protected void loadSelectedAsset() {
         txtDomain.setText(selectedAsset.getDomain());
-        txtLogin.setText(selectedAsset.getLoginNodeUrl());
         txtName.setText(selectedAsset.getName());
         txtScript.setText(selectedAsset.getLoadCompleteScript());
+        txtLoginServer.setText(selectedAsset.getLoginServer());
+        txtUsername.setText(selectedAsset.getUsername());
+        txtPassword.setText(selectedAsset.getPassword());
+        txtLoginNode.setText(selectedAsset.getLoginNodeUrl());
         if (selectedAsset.getNodes() != null) {
             lvNodes.setItems(FXCollections.observableArrayList(selectedAsset.getNodes()));
         }
     }
-
 }

@@ -17,7 +17,7 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnDelete" mnemonicParsing="false" text="Delete">
+                  <Button fx:id="btnDelete" disable="true" mnemonicParsing="false" text="Delete">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
@@ -81,12 +81,51 @@
             </HBox>
             <HBox layoutX="10.0" layoutY="90.0" prefHeight="13.0" prefWidth="295.0">
                <children>
-                  <Label prefWidth="110.0" text="Login URL">
+                  <Label prefWidth="110.0" text="Login Server">
                      <padding>
                         <Insets right="5.0" />
                      </padding>
                   </Label>
-                  <TextField fx:id="txtLogin" />
+                  <TextField fx:id="txtLoginServer" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="13.0" prefWidth="295.0">
+               <children>
+                  <Label prefWidth="110.0" text="Username">
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtUsername" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox layoutX="15.0" layoutY="198.0" prefHeight="13.0" prefWidth="295.0">
+               <children>
+                  <Label prefWidth="110.0" text="Password">
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtPassword" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox layoutX="15.0" layoutY="250.0" prefHeight="13.0" prefWidth="295.0">
+               <children>
+                  <Label prefWidth="110.0" text="Login Node">
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtLoginNode" />
                </children>
                <VBox.margin>
                   <Insets top="5.0" />

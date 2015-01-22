@@ -44,6 +44,7 @@ public class BrowserStateChangeListener implements ChangeListener<Worker.State> 
                     }
                 } catch (Throwable ex) {
                     LogService.Info(this, "Error: " + ex.getMessage());
+                    ex.printStackTrace();
                 }
                 break;
         }

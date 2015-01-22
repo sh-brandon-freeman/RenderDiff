@@ -1,6 +1,7 @@
 package org.priorityhealth.stab.pdiff.domain.service.comparator;
 
 import com.j256.ormlite.dao.ForeignCollection;
+import com.sun.webkit.network.Util;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -10,6 +11,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Duration;
 import netscape.javascript.JSException;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.Profile;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.State;
 import org.priorityhealth.stab.pdiff.domain.repository.asset.AssetRepositoryInterface;
@@ -17,6 +19,9 @@ import org.priorityhealth.stab.pdiff.domain.repository.asset.NodeRepositoryInter
 import org.priorityhealth.stab.pdiff.domain.repository.profile.ProfileRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.service.event.BrowserStateChangeHandlerInterface;
 import org.priorityhealth.stab.pdiff.domain.service.event.BrowserStateChangeListener;
+import org.priorityhealth.stab.pdiff.domain.service.login.ul.Credentials;
+import org.priorityhealth.stab.pdiff.domain.service.login.ul.Response;
+import org.priorityhealth.stab.pdiff.domain.service.login.ul.UniversalLoginService;
 import org.priorityhealth.stab.pdiff.service.DigestService;
 import org.priorityhealth.stab.pdiff.domain.service.html.ParserService;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
@@ -27,10 +32,17 @@ import org.priorityhealth.stab.pdiff.service.LogService;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLStreamHandler;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.sun.webkit.LoadListenerClient.LOAD_FAILED;
+import static com.sun.webkit.LoadListenerClient.MALFORMED_URL;
+import static com.sun.webkit.LoadListenerClient.PAGE_STARTED;
 
 /**
  *
@@ -127,8 +139,28 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
 
         LogService.Info(this, "Run ID: " + profile.getId());
 
-        if (asset.getLoginNodeUrl() != null && asset.getLoginNodeUrl().length() > 0) {
-            loadDocument(asset.getLoginNodeUrl());
+        // Logging in Asset if necessary
+        if (asset.getLoginServer() != null && asset.getLoginServer().length() > 0) {
+            Response response = UniversalLoginService.getAuthToken(
+                    asset.getLoginServer(),
+                    new Credentials(asset.getUsername(), asset.getPassword())
+            );
+
+            if (response.isSuccess()) {
+                String token = response.getMessage();
+                LogService.Info(this, "Token: " + token);
+                if (asset.getLoginNodeUrl() != null && asset.getLoginNodeUrl().length() > 0) {
+                    String loginNode = asset.getLoginNodeUrl().replace("<<token>>", token);
+                    LogService.Info(this, "Using login node: " + loginNode);
+                    loadDocument(loginNode, false);
+                    return;
+                } else {
+                    LogService.Info(this, "There was no login node.");
+                }
+            } else {
+                LogService.Info(this, "Login failed: " + response.getMessage());
+            }
+            LogService.Info(this, "Login has failed.");
         } else {
             loadNextNode();
         }
@@ -221,33 +253,51 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
         webEngine.reload();
     }
 
+    protected void loadDocument(String url) {
+        loadDocument(url, true);
+    }
+
     /**
      *
      * @param url Source
      */
-    public void loadDocument(final String url) {
-        this.currentUrl = url;
+    protected void loadDocument(final String url, boolean continueOnError) {
+        this.currentUrl = formatNodeUrl(url);
         this.urlHash = DigestService.getSHA1(currentUrl.getBytes());
         LogService.Info(this, "Loading: " + currentUrl);
-        webEngine.load(url);
+
+        UrlValidator urlValidator = new UrlValidator();
+        if (urlValidator.isValid(currentUrl)) {
+            LogService.Info(this, "Url valid.");
+            webEngine.load(currentUrl);
+        } else {
+            LogService.Info(this, "Url invalid.");
+            if (continueOnError) {
+                loadNextNode();
+            } else {
+                LogService.Info(this, "Load halted.");
+            }
+        }
     }
 
-    public void loadNextNode()
+    protected void loadNextNode()
     {
         LogService.Info(this, "Loading Next Node");
         if (queue.size() > queueIndex) {
             currentNode = queue.get(queueIndex);
             queueIndex++;
 
-            String url = currentNode.getUrl();
-            if (!url.startsWith(asset.getDomain()) && !url.startsWith("http")) {
-                url = asset.getDomain() + url;
-            }
-
-            loadDocument(url);
+            loadDocument(currentNode.getUrl());
         } else {
             onProfileComplete();
         }
+    }
+
+    protected String formatNodeUrl(String url) {
+        if (!url.startsWith(asset.getDomain()) && !url.startsWith("http")) {
+            return asset.getDomain() + url;
+        }
+        return url;
     }
 
     protected void onProfileComplete() {
