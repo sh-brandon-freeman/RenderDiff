@@ -262,14 +262,35 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
      * @param url Source
      */
     protected void loadDocument(final String url, boolean continueOnError) {
-        this.currentUrl = formatNodeUrl(url);
-        this.urlHash = DigestService.getSHA1(currentUrl.getBytes());
+        String previousUrl = currentUrl;
+        currentUrl = formatNodeUrl(url);
+
+        urlHash = DigestService.getSHA1(currentUrl.getBytes());
         LogService.Info(this, "Loading: " + currentUrl);
 
         UrlValidator urlValidator = new UrlValidator();
-        if (urlValidator.isValid(currentUrl)) {
+        if (currentUrl.startsWith("http://localhost") || urlValidator.isValid(currentUrl)) {
             LogService.Info(this, "Url valid.");
+
             webEngine.load(currentUrl);
+
+            // If the page doesn't need to reload, no event state will be triggered.
+            // Wait half a second and see if any asynchronous items are being loaded.
+            if (previousUrl != null) {
+                String documentUrlCurrent = getDocumentUrl(currentUrl);
+                String documentUrlPrevious = getDocumentUrl(previousUrl);
+                LogService.Info(this, "Match? " + documentUrlPrevious + " == " + documentUrlCurrent);
+                if (documentUrlPrevious.equals(documentUrlCurrent)) {
+                    PauseTransition pause = new PauseTransition(Duration.millis(500));
+                    pause.setOnFinished(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            onPageLoadSuccess();
+                        }
+                    });
+                    pause.play();
+                }
+            }
         } else {
             LogService.Info(this, "Url invalid.");
             if (continueOnError) {
@@ -296,6 +317,16 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
     protected String formatNodeUrl(String url) {
         if (!url.startsWith(asset.getDomain()) && !url.startsWith("http")) {
             return asset.getDomain() + url;
+        }
+        return url;
+    }
+
+    protected String getDocumentUrl(String url) {
+        if (url.contains("#")) {
+            String[] parts = url.split("#");
+            if (parts.length > 0) {
+                url = parts[0];
+            }
         }
         return url;
     }

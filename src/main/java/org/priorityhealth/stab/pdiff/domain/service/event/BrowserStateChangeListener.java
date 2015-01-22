@@ -23,12 +23,13 @@ public class BrowserStateChangeListener implements ChangeListener<Worker.State> 
         LogService.Info(this, "Browser State: " + observable.getValue().toString());
         switch (newState) {
             case READY:
-                createReadyTimer();
+                //createReadyTimer();
+                //browserStateChangeHandler.onPageLoadSuccess();
                 break;
             case SUCCEEDED:
-                if (stallTask != null) {
-                    stallTask.cancel();
-                }
+//                if (stallTask != null) {
+//                    stallTask.cancel();
+//                }
                 browserStateChangeHandler.onPageLoadSuccess();
                 break;
             case FAILED:

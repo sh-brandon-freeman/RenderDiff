@@ -170,13 +170,16 @@ public class StateCompareService {
                         tempDiffPath.toString()
                 );
                 if (isDifferent) {
-                    String diffImageSavePath = storePath + File.separator + UUID.randomUUID().toString() + "-diff.png";
-                    Files.move(tempDiffPath, Paths.get(diffImageSavePath), StandardCopyOption.REPLACE_EXISTING);
-                    result.setDiffImagePath(diffImageSavePath);
-                } else {
-                    // Don't rely on others to do your dirty work ...
-                    Files.delete(tempDiffPath);
+                    BufferedImage imageDiff = ImageService.loadBufferedImageFromFile(tempDiffPath.toString());
+                    if (imageDiff != null) {
+                        if (ImageService.hasRedPixels(imageDiff, true)) {
+                            String diffImageSavePath = storePath + File.separator + UUID.randomUUID().toString() + "-diff.png";
+                            Files.copy(tempDiffPath, Paths.get(diffImageSavePath), StandardCopyOption.REPLACE_EXISTING);
+                            result.setDiffImagePath(diffImageSavePath);
+                        }
+                    }
                 }
+                Files.delete(tempDiffPath);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -210,7 +213,7 @@ public class StateCompareService {
         ImageCommand compare=new ImageCommand();
         compare.setCommand("compare");
         IMOperation op = new IMOperation();
-        op.fuzz(50.0);
+        op.fuzz(25d, true);
         op.metric("RMSE");
         op.highlightColor("Red");
         op.compose("src");

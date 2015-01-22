@@ -140,4 +140,29 @@ public class ImageService {
         graphics.fill(new Rectangle(x, y, width, height));
         graphics.dispose();
     }
+
+    public static boolean hasRedPixels(BufferedImage bufferedImage) {
+        return hasRedPixels(bufferedImage, false);
+    }
+
+    public static boolean hasRedPixels(BufferedImage bufferedImage, boolean strict) {
+        int w = bufferedImage.getWidth();
+        int h = bufferedImage.getHeight();
+
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                int pixel = bufferedImage.getRGB(j, i);
+                int alpha = (pixel >> 24) & 0xff;
+                int red = (pixel >> 16) & 0xff;
+                if (alpha == 255) {
+                    if (!strict && red > 0) {
+                        return true;
+                    } else if (strict && red == 255) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
