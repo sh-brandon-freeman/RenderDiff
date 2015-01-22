@@ -1,8 +1,9 @@
-package org.priorityhealth.stab.pdiff.persistence.repository;
+package org.priorityhealth.stab.pdiff.persistence.repository.factory;
 
 import com.j256.ormlite.support.ConnectionSource;
 import org.priorityhealth.stab.pdiff.persistence.repository.asset.AssetRepository;
 import org.priorityhealth.stab.pdiff.persistence.repository.asset.NodeRepository;
+import org.priorityhealth.stab.pdiff.persistence.repository.profile.IgnoredAreaRepository;
 import org.priorityhealth.stab.pdiff.persistence.repository.profile.ProfileRepository;
 import org.priorityhealth.stab.pdiff.persistence.repository.profile.StateRepository;
 import org.priorityhealth.stab.pdiff.persistence.repository.test.TestRepository;
@@ -19,6 +20,7 @@ public class RepositoryFactory {
     protected ProfileRepository profileRepository;
     protected TestRepository testRepository;
     protected ResultRepository resultRepository;
+    protected IgnoredAreaRepository ignoredAreaRepository;
 
 
     public RepositoryFactory(ConnectionSource connectionSource) {
@@ -83,6 +85,13 @@ public class RepositoryFactory {
         return resultRepository;
     }
 
+    public IgnoredAreaRepository getIgnoredAreaRepository() throws SQLException {
+        if (ignoredAreaRepository == null) {
+            ignoredAreaRepository = new IgnoredAreaRepository(connectionSource);
+        }
+        return ignoredAreaRepository;
+    }
+
     public void buildStructure() throws SQLException {
         getResultRepository().createTable();
         getTestRepository().createTable();
@@ -90,5 +99,6 @@ public class RepositoryFactory {
         getProfileRepository().createTable();
         getNodeRepository().createTable();
         getAssetRepository().createTable();
+        getIgnoredAreaRepository().createTable();
     }
 }

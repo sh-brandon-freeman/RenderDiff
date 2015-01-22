@@ -1,6 +1,8 @@
 package org.priorityhealth.stab.pdiff.domain.entity.profile;
 
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 import org.priorityhealth.stab.pdiff.domain.entity.AbstractEntity;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Node;
@@ -27,6 +29,9 @@ public class State extends AbstractEntity {
 
     @DatabaseField
     protected Date created;
+
+    @ForeignCollectionField(eager = true)
+    protected ForeignCollection<IgnoredArea> ignoredAreas;
 
     public int getId() {
         return id;
@@ -70,6 +75,25 @@ public class State extends AbstractEntity {
 
     public State setCreated(Date created) {
         this.created = created;
+        return this;
+    }
+
+    public ForeignCollection<IgnoredArea> getIgnoredAreas() {
+        return ignoredAreas;
+    }
+
+    public State setIgnoredAreas(ForeignCollection<IgnoredArea> ignoredAreas) {
+        this.ignoredAreas = ignoredAreas;
+        return this;
+    }
+
+    public State addIgnoredArea(IgnoredArea ignoredArea) {
+        this.ignoredAreas.add(ignoredArea);
+        return this;
+    }
+
+    public State removeIgnoredArea(IgnoredArea ignoredArea) {
+        this.ignoredAreas.remove(ignoredArea);
         return this;
     }
 }

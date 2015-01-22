@@ -59,9 +59,19 @@ public class TestController extends AbstractStackedController implements Initial
     protected TestRepositoryInterface testRepository;
 
     protected ObservableList<Result> resultsList;
+    protected ObservableList<Result> allResultsList;
 
     @FXML
     private Button btnCompare;
+
+    @FXML
+    private Button btnAllResults;
+
+    @FXML
+    private Button btnDifferentResults;
+
+    @FXML
+    private Button btnSameResults;
 
     @FXML
     private ComboBox<Asset> cbAsset1;
@@ -117,6 +127,9 @@ public class TestController extends AbstractStackedController implements Initial
         this.stateRepository = stateRepository;
         this.resultRepository = resultRepository;
         this.testRepository = testRepository;
+
+        resultsList = FXCollections.observableArrayList();
+        allResultsList = FXCollections.observableArrayList();
     }
 
     @Override
@@ -259,6 +272,8 @@ public class TestController extends AbstractStackedController implements Initial
                 Profile profile2 = cbProfile2.getValue();
 
                 if (profile1 != null && profile2 != null) {
+                    resultsList.clear();
+                    allResultsList.clear();
                     StateCompareService stateCompareService = new StateCompareService(
                             profile1,
                             profile2,
@@ -273,10 +288,6 @@ public class TestController extends AbstractStackedController implements Initial
             }
         });
 
-        resultsList = FXCollections.observableArrayList();
-        lvResults.setItems(resultsList);
-
-        resultsList = FXCollections.observableArrayList();
         lvResults.setItems(resultsList);
 
         lvResults.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -348,6 +359,38 @@ public class TestController extends AbstractStackedController implements Initial
                 }
             }
         });
+
+        btnAllResults.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                resultsList.clear();
+                resultsList.addAll(allResultsList);
+            }
+        });
+
+        btnSameResults.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                resultsList.clear();
+                for (Result result : allResultsList) {
+                    if (result.getDiffImagePath() == null || result.getDiffImagePath().length() == 0) {
+                        resultsList.add(result);
+                    }
+                }
+            }
+        });
+
+        btnDifferentResults.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                resultsList.clear();
+                for (Result result : allResultsList) {
+                    if (result.getDiffImagePath() != null && result.getDiffImagePath().length() > 0) {
+                        resultsList.add(result);
+                    }
+                }
+            }
+        });
     }
 
     public void loadResult(Result result) {
@@ -383,7 +426,11 @@ public class TestController extends AbstractStackedController implements Initial
         if (result == null) {
             return;
         }
+        allResultsList.add(result);
+    }
 
-        resultsList.add(result);
+    @Override
+    public void onQueueComplete() {
+        resultsList.addAll(allResultsList);
     }
 }

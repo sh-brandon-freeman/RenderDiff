@@ -4,6 +4,7 @@ import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 import org.im4java.core.ImageCommand;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Node;
+import org.priorityhealth.stab.pdiff.domain.entity.profile.IgnoredArea;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.Profile;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.State;
 import org.priorityhealth.stab.pdiff.domain.entity.test.Result;
@@ -133,6 +134,8 @@ public class StateCompareService {
         } else {
             LogService.Info(this, "There was no queue to iterate.");
         }
+
+        stateResult.onQueueComplete();
     }
 
     public void executeTest(Result result) {
@@ -152,6 +155,11 @@ public class StateCompareService {
 
                 imageKnown = ImageService.resizeImageCanvas(imageKnown, dimensions);
                 imageCurrent = ImageService.resizeImageCanvas(imageCurrent, dimensions);
+
+                blockOffIgnored(result.getKnown(), imageKnown);
+                blockOffIgnored(result.getCurrent(), imageKnown);
+                blockOffIgnored(result.getKnown(), imageCurrent);
+                blockOffIgnored(result.getCurrent(), imageCurrent);
 
                 ImageService.saveImageFromBufferedImage(imageKnown, tempKnownPath.toString());
                 ImageService.saveImageFromBufferedImage(imageCurrent, tempCurrentPath.toString());
@@ -174,6 +182,16 @@ public class StateCompareService {
             ex.printStackTrace();
         }
         stateResult.onCompareComplete(result);
+    }
+
+    protected void blockOffIgnored(State state, BufferedImage bufferedImage) {
+        if (state == null || bufferedImage == null) {
+            return;
+        }
+
+        for (IgnoredArea ignoredArea : state.getIgnoredAreas()) {
+            ImageService.drawRectangle(bufferedImage, ignoredArea.getX1(), ignoredArea.getY1(), ignoredArea.getX2(), ignoredArea.getY2(), Color.BLACK);
+        }
     }
 
     /**

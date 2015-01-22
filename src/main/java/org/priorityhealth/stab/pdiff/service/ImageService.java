@@ -124,4 +124,20 @@ public class ImageService {
         }
         return writableImage;
     }
+
+    public static void drawRectangle(BufferedImage bufferedImage, int x1, int y1, int x2, int y2, Color color) {
+        if (bufferedImage == null) {
+            return;
+        }
+
+        int x = x1 < x2 ? x1 : x2;
+        int y = y1 < y2 ? y1 : y2;
+        int width = Math.abs(x1 - x2);
+        int height = Math.abs(y1 - y2);
+
+        Graphics2D graphics = bufferedImage.createGraphics();
+        graphics.setColor(color);
+        graphics.fill(new Rectangle(x, y, width, height));
+        graphics.dispose();
+    }
 }

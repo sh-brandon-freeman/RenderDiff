@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
@@ -45,7 +46,31 @@
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <ListView fx:id="lvResults" prefHeight="200.0" prefWidth="200.0" />
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <ListView fx:id="lvResults" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <top>
+                        <HBox prefHeight="13.0" prefWidth="295.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="btnAllResults" mnemonicParsing="false" text="All" />
+                              <Button fx:id="btnDifferentResults" mnemonicParsing="false" text="Different">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="btnSameResults" mnemonicParsing="false" text="Same">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                  </BorderPane>
                </items>
             </SplitPane>
          </items>

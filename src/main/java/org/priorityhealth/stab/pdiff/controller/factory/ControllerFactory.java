@@ -5,7 +5,7 @@ import org.priorityhealth.stab.pdiff.controller.AssetController;
 import org.priorityhealth.stab.pdiff.controller.MainController;
 import org.priorityhealth.stab.pdiff.controller.ProfileController;
 import org.priorityhealth.stab.pdiff.controller.TestController;
-import org.priorityhealth.stab.pdiff.persistence.repository.RepositoryFactory;
+import org.priorityhealth.stab.pdiff.persistence.repository.factory.RepositoryFactory;
 import org.priorityhealth.stab.pdiff.service.LogService;
 
 import java.lang.reflect.InvocationTargetException;
