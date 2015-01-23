@@ -20,7 +20,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import org.priorityhealth.stab.pdiff.controller.stacked.AbstractStackedController;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.Profile;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.State;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
@@ -48,7 +47,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class TestController extends AbstractStackedController implements Initializable, StateResultInterface {
+public class TestController implements Initializable, StateResultInterface {
 
     public static final String CONTROLLER_NAME = "TEST";
 

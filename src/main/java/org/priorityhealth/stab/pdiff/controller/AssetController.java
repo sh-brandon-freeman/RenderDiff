@@ -9,7 +9,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import org.priorityhealth.stab.pdiff.controller.stacked.AbstractStackedController;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Node;
 import org.priorityhealth.stab.pdiff.domain.repository.asset.AssetRepositoryInterface;
@@ -24,7 +23,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class AssetController extends AbstractStackedController implements Initializable {
+public class AssetController implements Initializable {
 
     public static final String CONTROLLER_NAME = "ASSET";
 

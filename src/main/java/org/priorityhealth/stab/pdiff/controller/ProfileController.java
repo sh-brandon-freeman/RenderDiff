@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.web.WebView;
-import org.priorityhealth.stab.pdiff.controller.stacked.AbstractStackedController;
 import org.priorityhealth.stab.pdiff.domain.repository.asset.AssetRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.asset.NodeRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.ProfileRepositoryInterface;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ProfileController extends AbstractStackedController implements Initializable {
+public class ProfileController implements Initializable {
 
     public static final String CONTROLLER_NAME = "PROFILE";
 
