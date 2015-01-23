@@ -2,52 +2,76 @@ package org.priorityhealth.stab.pdiff.controller.parent;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import org.priorityhealth.stab.pdiff.controller.factory.ControllerFactory;
-import org.priorityhealth.stab.pdiff.controller.stacked.AbstractStackedController;
 import org.priorityhealth.stab.pdiff.service.LogService;
+import sun.plugin.javascript.navig.Anchor;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 abstract public class AbstractParentController implements Initializable {
 
     protected ControllerFactory controllerFactory;
 
-    protected HashMap<String, Node> screens = new HashMap<String, Node>();
-
     public AbstractParentController(ControllerFactory controllerFactory) {
         this.controllerFactory = controllerFactory;
     }
 
-    public boolean loadScreen(String name, AbstractStackedController stackedController) {
-        String className = stackedController.getClass().getName();
-        String viewName = "/views/" + className.substring(
-                className.lastIndexOf('.') + 1,
-                className.lastIndexOf("Controller")
-        ).toLowerCase() + ".fxml";
-        stackedController.setParentController(this);
+    public boolean setScreen(final String name) {
+        String viewName = "/views/" + name.toLowerCase() + ".fxml";
+
+        try {
+            File viewFile = new File(this.getClass().getResource(viewName).toURI());
+            if (!viewFile.exists() || viewFile.isDirectory()) {
+                LogService.Info(this, "View file '" + viewFile + "' doesn't exist!");
+                return false;
+            }
+        } catch (URISyntaxException ex) {
+            LogService.Info(this, "View file not a valid resource!");
+            return false;
+        }
+
+        Pane contentPane = getContentPane();
+        if (contentPane == null) {
+            LogService.Info(this, "There was no content pane in which to load content!");
+            return false;
+        }
+
+        Parent screen;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(viewName));
             fxmlLoader.setControllerFactory(controllerFactory);
-            Parent loadScreen = fxmlLoader.load();
-            screens.put(name, loadScreen);
-            return true;
+            screen = fxmlLoader.load();
         } catch(IOException ex) {
             ex.printStackTrace();
             return false;
         }
-    }
 
-    public boolean unloadScreen(String name) {
-        if(screens.remove(name) == null) {
-            LogService.Info(this, "Screen didn't exist");
+        if (screen == null) {
+            LogService.Info(this, "There was no content in which to load!");
             return false;
-        } else {
-            return true;
         }
+
+        if (contentPane instanceof AnchorPane) {
+            AnchorPane.setLeftAnchor(screen, 0d);
+            AnchorPane.setRightAnchor(screen, 0d);
+            AnchorPane.setTopAnchor(screen, 0d);
+            AnchorPane.setBottomAnchor(screen, 0d);
+        }
+
+        if (!contentPane.getChildren().isEmpty()) {
+            contentPane.getChildren().clear();
+        }
+        contentPane.getChildren().add(screen);
+
+        return true;
     }
 
-    abstract public boolean setScreen(final String name);
+    abstract protected Pane getContentPane();
 }
