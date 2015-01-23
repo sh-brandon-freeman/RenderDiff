@@ -1,9 +1,8 @@
-package org.priorityhealth.stab.pdiff.view.web;
+package org.priorityhealth.stab.pdiff.service.http;
 
 import sun.net.www.protocol.http.Handler;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -12,9 +11,8 @@ public class UrlMonitoringHttpHandler extends Handler {
     @Override
     protected URLConnection openConnection(URL url) throws IOException {
 
-        UrlMonitoringHttpConnection urlConnection = new UrlMonitoringHttpConnection(url, this);
+        return new UrlMonitoringHttpConnection(url, this);
 
-        return urlConnection;
     }
 
 

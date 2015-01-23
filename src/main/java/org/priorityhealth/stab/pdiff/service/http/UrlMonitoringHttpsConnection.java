@@ -1,4 +1,4 @@
-package org.priorityhealth.stab.pdiff.view.web;
+package org.priorityhealth.stab.pdiff.service.http;
 
 import sun.net.www.protocol.https.HttpsURLConnectionImpl;
 

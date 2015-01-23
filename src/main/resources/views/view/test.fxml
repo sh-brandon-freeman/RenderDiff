@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?scenebuilder-stylesheet css/test.css?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.priorityhealth.stab.pdiff.controller.TestController">
+   <center>
+      <SplitPane dividerPositions="0.47157190635451507" prefHeight="437.0" prefWidth="832.0" BorderPane.alignment="CENTER">
+         <items>
+            <VBox maxWidth="300.0" minWidth="300.0" prefHeight="200.0" prefWidth="300.0" SplitPane.resizableWithParent="false">
+               <children>
+                  <HBox>
+                     <children>
+                        <Label prefWidth="50.0" text="Source">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="cbAsset1" prefWidth="150.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label prefWidth="50.0" text="Profile">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="cbProfile1" prefWidth="150.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <ListView fx:id="lvStates1" prefHeight="200.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin></ListView>
+                  <HBox>
+                     <children>
+                        <Label prefWidth="50.0" text="Source">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="cbAsset2" prefWidth="150.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label prefWidth="50.0" text="Profile">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="cbProfile2" prefWidth="150.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <ListView fx:id="lvStates2" prefHeight="200.0" prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin></ListView>
+                  <Button fx:id="btnCompare" mnemonicParsing="false" text="Compare" />
+               </children>
+            </VBox>
+            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+               <items>
+                  <AnchorPane>
+                     <children>
+                        <SplitPane dividerPositions="0.33, 0.66" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <items>
+                              <ScrollPane fx:id="spKnown" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <ImageView fx:id="ivKnown" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="spDiff" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <ImageView fx:id="ivDiff" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="spCurrent" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <ImageView fx:id="ivCurrent" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                 </content>
+                              </ScrollPane>
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <ListView fx:id="lvResults" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                     </center>
+                     <top>
+                        <HBox prefHeight="13.0" prefWidth="295.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="btnAllResults" mnemonicParsing="false" text="All" />
+                              <Button fx:id="btnDifferentResults" mnemonicParsing="false" text="Different">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="btnSameResults" mnemonicParsing="false" text="Same">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                  </BorderPane>
+               </items>
+            </SplitPane>
+         </items>
+      </SplitPane>
+   </center>
+</BorderPane>

@@ -24,7 +24,7 @@ abstract public class AbstractParentController implements Initializable {
     }
 
     public boolean setScreen(final String name) {
-        String viewName = "/views/" + name.toLowerCase() + ".fxml";
+        String viewName = "/views/view/" + name.toLowerCase() + ".fxml";
 
         try {
             File viewFile = new File(this.getClass().getResource(viewName).toURI());
@@ -51,6 +51,20 @@ abstract public class AbstractParentController implements Initializable {
         } catch(IOException ex) {
             ex.printStackTrace();
             return false;
+        }
+
+        String styleName = "/views/css/" + name.toLowerCase() + ".css";
+        try {
+            File cssFile = new File(this.getClass().getResource(styleName).toURI());
+            if (cssFile.exists() && !cssFile.isDirectory()) {
+                screen.getStylesheets().add(styleName);
+            } else {
+                LogService.Info(this, "Css file '" + cssFile + "' doesn't exist!");
+            }
+        } catch (URISyntaxException ex) {
+            LogService.Info(this, "Css file not a valid resource!");
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
         }
 
         if (screen == null) {

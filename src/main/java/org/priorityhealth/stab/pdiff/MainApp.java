@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.priorityhealth.stab.pdiff.controller.factory.ControllerFactory;
 import org.priorityhealth.stab.pdiff.persistence.repository.factory.RepositoryFactory;
-import org.priorityhealth.stab.pdiff.view.web.UrlMonitoringStreamHandlerFactory;
+import org.priorityhealth.stab.pdiff.service.http.UrlMonitoringStreamHandlerFactory;
 
 import java.net.URL;
 
@@ -30,7 +30,7 @@ public class MainApp extends Application {
         RepositoryFactory repositoryFactory = new RepositoryFactory(connectionSource);
         ControllerFactory controllerFactory = new ControllerFactory(repositoryFactory);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/main.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/view/main.fxml"));
         fxmlLoader.setControllerFactory(controllerFactory);
 
         Parent root = fxmlLoader.load();

@@ -111,9 +111,6 @@ public class TestController implements Initializable, StateResultInterface {
     @FXML
     private ScrollPane spDiff;
 
-    @FXML
-    private HBox hBox;
-
     public TestController(
             AssetRepositoryInterface assetRepository,
             ProfileRepositoryInterface profileRepository,
@@ -137,11 +134,6 @@ public class TestController implements Initializable, StateResultInterface {
     }
 
     protected void initControls() {
-        AnchorPane.setLeftAnchor(hBox, 0d);
-        AnchorPane.setRightAnchor(hBox, 0d);
-        AnchorPane.setTopAnchor(hBox, 0d);
-        AnchorPane.setBottomAnchor(hBox, 0d);
-
         cbAsset1.setCellFactory(new AssetCellFactory());
         cbAsset2.setCellFactory(new AssetCellFactory());
         cbAsset1.setConverter(new AssetStringConverter());
