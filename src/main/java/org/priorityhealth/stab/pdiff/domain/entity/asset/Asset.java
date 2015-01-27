@@ -13,12 +13,6 @@ import org.priorityhealth.stab.pdiff.domain.entity.AbstractEntity;
 public class Asset extends AbstractEntity {
 
     /**
-     * ID
-     */
-    @DatabaseField(generatedId = true)
-    protected int id;
-
-    /**
      * Name
      */
     @DatabaseField(canBeNull = false)
@@ -56,24 +50,6 @@ public class Asset extends AbstractEntity {
 
     @DatabaseField
     protected String password;
-
-    /**
-     *
-     * @return Crawl ID
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     *
-     * @param id Crawl ID
-     * @return Crawl
-     */
-    public Asset setId(int id) {
-        this.id = id;
-        return this;
-    }
 
     /**
      *

@@ -15,9 +15,6 @@ import java.util.Date;
 @DatabaseTable(tableName = "profile.states")
 public class State extends AbstractEntity {
 
-    @DatabaseField(generatedId = true)
-    protected int id;
-
     @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh=true, maxForeignAutoRefreshLevel=3)
     protected Node node;
 
@@ -32,15 +29,6 @@ public class State extends AbstractEntity {
 
     @ForeignCollectionField(eager = true)
     protected ForeignCollection<IgnoredArea> ignoredAreas;
-
-    public int getId() {
-        return id;
-    }
-
-    public State setId(int id) {
-        this.id = id;
-        return this;
-    }
 
     public Node getNode() {
         return node;

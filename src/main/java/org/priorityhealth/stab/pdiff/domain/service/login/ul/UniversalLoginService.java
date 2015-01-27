@@ -22,8 +22,8 @@ public class UniversalLoginService {
 
         StringEntity postingString = null;
         try {
+            LogService.Info("UniversalLoginService", "Using creds: " + credentials);
             postingString = new StringEntity(gson.toJson(credentials));
-            LogService.Info(UniversalLoginService.class.getClass(), "Post Data: " + postingString.toString());
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
             return null;
@@ -40,7 +40,7 @@ public class UniversalLoginService {
             if (response.getStatusLine().getStatusCode() == 200) {
                 httpEntity = response.getEntity();
             } else {
-                LogService.Info(UniversalLoginService.class.getClass(), "Failed: " + response.getStatusLine().getStatusCode());
+                LogService.Info("UniversalLoginService", "Failed: " + response.getStatusLine().getStatusCode());
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -62,10 +62,10 @@ public class UniversalLoginService {
             }
         }
 
-        LogService.Info(UniversalLoginService.class.getClass(), httpEntity.getContentType().toString());
+        LogService.Info("UniversalLoginService", httpEntity.getContentType().toString());
         try {
             String source = EntityUtils.toString(httpEntity);
-            LogService.Info(UniversalLoginService.class.getClass(), "Source: " + source);
+            LogService.Info("UniversalLoginService", "Source: " + source);
             return gson.fromJson(source, Response.class);
         } catch (IOException ex) {
             ex.printStackTrace();

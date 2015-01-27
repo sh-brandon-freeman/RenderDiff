@@ -6,8 +6,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?scenebuilder-stylesheet css/test.css?>
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.priorityhealth.stab.pdiff.controller.TestController">
    <center>
       <SplitPane dividerPositions="0.47157190635451507" prefHeight="437.0" prefWidth="832.0" BorderPane.alignment="CENTER">

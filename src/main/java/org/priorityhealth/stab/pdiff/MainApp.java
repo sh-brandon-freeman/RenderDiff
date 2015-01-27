@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.priorityhealth.stab.pdiff.controller.factory.ControllerFactory;
+import org.priorityhealth.stab.pdiff.domain.service.comparator.factory.ComparatorServiceFactory;
 import org.priorityhealth.stab.pdiff.persistence.repository.factory.RepositoryFactory;
 import org.priorityhealth.stab.pdiff.service.http.UrlMonitoringStreamHandlerFactory;
 
@@ -29,6 +30,7 @@ public class MainApp extends Application {
 
         RepositoryFactory repositoryFactory = new RepositoryFactory(connectionSource);
         ControllerFactory controllerFactory = new ControllerFactory(repositoryFactory);
+        ComparatorServiceFactory.setRepositoryFactory(repositoryFactory);
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/view/main.fxml"));
         fxmlLoader.setControllerFactory(controllerFactory);

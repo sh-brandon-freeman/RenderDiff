@@ -12,6 +12,7 @@
                 <MenuItem fx:id="menuAsset" mnemonicParsing="false" text="Asset" />
                 <MenuItem fx:id="menuProfile" mnemonicParsing="false" text="Profile" />
                 <MenuItem fx:id="menuTest" mnemonicParsing="false" text="Test" />
+                <MenuItem fx:id="menuSchedule" mnemonicParsing="false" text="Comparator" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

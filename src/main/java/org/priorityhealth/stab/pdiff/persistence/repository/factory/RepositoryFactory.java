@@ -91,14 +91,4 @@ public class RepositoryFactory {
         }
         return ignoredAreaRepository;
     }
-
-    public void buildStructure() throws SQLException {
-        getResultRepository().createTable();
-        getTestRepository().createTable();
-        getStateRepository().createTable();
-        getProfileRepository().createTable();
-        getNodeRepository().createTable();
-        getAssetRepository().createTable();
-        getIgnoredAreaRepository().createTable();
-    }
 }

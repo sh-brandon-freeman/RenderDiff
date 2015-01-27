@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="427.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.priorityhealth.stab.pdiff.controller.ComparatorController">
+   <items>
+      <VBox maxWidth="300.0" minWidth="300.0" prefHeight="200.0" prefWidth="300.0">
+         <children>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Separator>
+            <Label text="Source 1">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" top="3.0" />
+               </VBox.margin>
+            </Label>
+            <Separator prefWidth="200.0" />
+            <HBox>
+               <children>
+                  <Label prefWidth="50.0" text="Asset">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ComboBox fx:id="cbAsset1" prefWidth="235.0" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <CheckBox fx:id="chkNewProfile1" mnemonicParsing="false" text="New Profile">
+               <VBox.margin>
+                  <Insets left="55.0" top="5.0" />
+               </VBox.margin>
+            </CheckBox>
+            <HBox>
+               <children>
+                  <Label prefWidth="50.0" text="Profile">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ComboBox fx:id="cbProfile1" prefWidth="235.0" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Separator>
+            <Label text="Source 2">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" top="3.0" />
+               </VBox.margin>
+            </Label>
+            <Separator prefWidth="200.0" />
+            <HBox>
+               <children>
+                  <Label prefWidth="50.0" text="Asset">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ComboBox fx:id="cbAsset2" prefWidth="235.0" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <CheckBox fx:id="chkNewProfile2" mnemonicParsing="false" text="New Profile">
+               <VBox.margin>
+                  <Insets left="55.0" top="5.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="chkNodes" layoutX="65.0" layoutY="201.0" mnemonicParsing="false" text="Use Source 1 Nodes">
+               <VBox.margin>
+                  <Insets left="55.0" top="5.0" />
+               </VBox.margin>
+            </CheckBox>
+            <HBox>
+               <children>
+                  <Label prefWidth="50.0" text="Profile">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ComboBox fx:id="cbProfile2" prefWidth="235.0" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Separator>
+            <Button fx:id="btnRun" mnemonicParsing="false" text="Run">
+               <VBox.margin>
+                  <Insets left="5.0" top="5.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <StackPane prefHeight="150.0" prefWidth="200.0">
+         <children>
+            <AnchorPane prefHeight="178.0" prefWidth="290.0">
+               <children>
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <WebView fx:id="wvProfile" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+            <Pane disable="true" opacity="0.0" prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </StackPane>
+   </items>
+</SplitPane>

@@ -40,9 +40,9 @@ public class ImageService {
                 throw new IllegalStateException("Couldn't create dir: " + parent);
             }
             ImageIO.write(img, "png", file);
-            LogService.Info(TextFileService.class.getClass(), "Saved image to: " + file.getAbsolutePath());
+            LogService.Info("ImageService", "Saved image to: " + file.getAbsolutePath());
         } catch (IOException ex) {
-            LogService.Info(TextFileService.class.getClass(), "IOException: " + ex.getMessage());
+            LogService.Info("ImageService", "IOException: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -59,9 +59,9 @@ public class ImageService {
             if(file.exists()) {
                 result = ImageIO.read(file);
             }
-            LogService.Info(TextFileService.class.getClass(), "Successfully loaded: " + file.getAbsolutePath());
+            LogService.Info("ImageService", "Successfully loaded: " + file.getAbsolutePath());
         } catch (IOException ex) {
-            LogService.Info(TextFileService.class.getClass(), "IOException: " + ex.getMessage());
+            LogService.Info("ImageService", "IOException: " + ex.getMessage());
             ex.printStackTrace();
         }
         return result;
@@ -82,7 +82,7 @@ public class ImageService {
             }
         }
 
-        LogService.Info(TextFileService.class.getClass(), "Max Dimensions: " + newDimensions.toString());
+        LogService.Info("ImageService", "Max Dimensions: " + newDimensions.toString());
         return newDimensions;
     }
 
@@ -101,7 +101,7 @@ public class ImageService {
         graphics.drawImage(originalImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), null);
         graphics.dispose();
 
-        LogService.Info(TextFileService.class.getClass(),
+        LogService.Info("ImageService",
                 originalImage.getWidth() + "x" + originalImage.getHeight() + " -> " +
                         resizedImage.getWidth() + "x" + resizedImage.getHeight()
         );

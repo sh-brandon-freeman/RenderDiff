@@ -8,9 +8,6 @@ import java.util.Date;
 @DatabaseTable(tableName = "profile.ignored")
 public class IgnoredArea {
 
-    @DatabaseField(generatedId = true)
-    protected int id;
-
     @DatabaseField(canBeNull = false, foreign = true)
     protected State state;
 
@@ -28,15 +25,6 @@ public class IgnoredArea {
 
     @DatabaseField(canBeNull = false)
     protected Date created;
-
-    public int getId() {
-        return id;
-    }
-
-    public IgnoredArea setId(int id) {
-        this.id = id;
-        return this;
-    }
 
     public State getState() {
         return state;

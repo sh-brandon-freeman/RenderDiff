@@ -23,7 +23,7 @@ public class TextFileService {
             fileWriter = new FileWriter(file);
             fileWriter.write(content);
         } catch (IOException ex) {
-            LogService.Info(TextFileService.class, "IOException: " + ex.getMessage());
+            LogService.Info("TextFileService", "IOException: " + ex.getMessage());
             ex.printStackTrace();
         } finally {
             if (fileWriter != null) {
@@ -67,9 +67,9 @@ public class TextFileService {
             while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line);
             }
-            LogService.Info(TextFileService.class, "Loaded text from input stream.");
+            LogService.Info("TextFileService", "Loaded text from input stream.");
         } catch (IOException ex) {
-            LogService.Info(TextFileService.class, "IOException: " + ex.getMessage());
+            LogService.Info("TextFileService", "IOException: " + ex.getMessage());
             ex.printStackTrace();
         } finally {
             if (bufferedReader != null) {
@@ -95,7 +95,7 @@ public class TextFileService {
         try {
             result = new FileInputStream(initialFile);
         } catch (IOException ex) {
-            LogService.Info(TextFileService.class, "IOException: " + ex.getMessage());
+            LogService.Info("TextFileService", "IOException: " + ex.getMessage());
             ex.printStackTrace();
         }
         return result;
@@ -116,7 +116,7 @@ public class TextFileService {
             fileReader.read(chars);
             result = new String(chars);
         } catch (IOException ex) {
-            LogService.Info(TextFileService.class, "IOException: " + ex.getMessage());
+            LogService.Info("TextFileService", "IOException: " + ex.getMessage());
             ex.printStackTrace();
         } finally {
             if (fileReader != null) {

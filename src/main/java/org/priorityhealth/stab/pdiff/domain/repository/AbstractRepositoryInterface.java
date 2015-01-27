@@ -14,4 +14,5 @@ abstract public interface AbstractRepositoryInterface<T> {
     public void delete(T entity) throws SQLException;
     public void close() throws SQLException;
     public Dao<T, String> getDao();
+    public void refresh(T entity) throws SQLException;
 }

@@ -9,11 +9,8 @@ import org.priorityhealth.stab.pdiff.domain.entity.profile.Profile;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.State;
 import org.priorityhealth.stab.pdiff.domain.entity.test.Result;
 import org.priorityhealth.stab.pdiff.domain.entity.test.Test;
-import org.priorityhealth.stab.pdiff.domain.repository.profile.StateRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.test.ResultRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.test.TestRepositoryInterface;
-import org.priorityhealth.stab.pdiff.persistence.repository.test.ResultRepository;
-import org.priorityhealth.stab.pdiff.service.DigestService;
 import org.priorityhealth.stab.pdiff.service.ImageService;
 import org.priorityhealth.stab.pdiff.service.LogService;
 
@@ -39,7 +36,7 @@ public class StateCompareService {
     protected Profile profile1;
     protected Profile profile2;
     protected String storePath;
-    protected StateResultInterface stateResult;
+    protected StateCompareListenerInterface stateCompareListener;
     protected List<Result> queue = new ArrayList<Result>();
     protected Test test;
 
@@ -47,19 +44,21 @@ public class StateCompareService {
     protected TestRepositoryInterface testRepository;
 
     public StateCompareService(
-            Profile profile1,
-            Profile profile2,
-            String storePath,
-            StateResultInterface stateResult,
             ResultRepositoryInterface resultRepository,
-            TestRepositoryInterface testRepository
+            TestRepositoryInterface testRepository,
+            String storePath
+    ) {
+        this.resultRepository = resultRepository;
+        this.testRepository = testRepository;
+        this.storePath = storePath;
+    }
+
+    public void init(
+            Profile profile1,
+            Profile profile2
     ) {
         this.profile1 = profile1;
         this.profile2 = profile2;
-        this.storePath = storePath;
-        this.stateResult = stateResult;
-        this.resultRepository = resultRepository;
-        this.testRepository = testRepository;
 
         test = new Test();
         test.setKnown(profile1);
@@ -72,8 +71,11 @@ public class StateCompareService {
             ex.printStackTrace();
         }
 
-        buildQueue();
         createFolder();
+    }
+
+    public void setStateCompareListener(StateCompareListenerInterface stateCompareListener) {
+        this.stateCompareListener = stateCompareListener;
     }
 
     protected void createFolder() {
@@ -94,6 +96,26 @@ public class StateCompareService {
     }
 
     protected void buildQueue() {
+        if (profile1 == null) {
+            LogService.Info(this, "Profile1 missing.");
+            return;
+        }
+
+        if (profile2 == null) {
+            LogService.Info(this, "Profile2 missing.");
+            return;
+        }
+
+        if (profile1.getStates() == null) {
+            LogService.Info(this, "Profile1 has no state data.");
+            return;
+        }
+
+        if (profile2.getStates() == null) {
+            LogService.Info(this, "Profile2 has no state data.");
+            return;
+        }
+
         for (State knownState : profile1.getStates()) {
             Node knownNode = knownState.getNode();
             if (knownNode == null || knownNode.getUrl() == null) {
@@ -113,7 +135,7 @@ public class StateCompareService {
                     result.setCreated(new Date());
                     result.setTest(test);
                     queue.add(result);
-                    LogService.Info(this, "Adding url: " + knownNode.getUrl());
+                    LogService.Info(this, "Adding url: " + knownNode.getUrl() + " [" + knownState.getId() + " -> " + currentState.getId() + "]");
                 }
             }
         }
@@ -122,6 +144,8 @@ public class StateCompareService {
     }
 
     public void run() {
+        buildQueue();
+
         if (queue.size() > 0) {
             for (Result result : queue) {
                 executeTest(result);
@@ -135,7 +159,9 @@ public class StateCompareService {
             LogService.Info(this, "There was no queue to iterate.");
         }
 
-        stateResult.onQueueComplete();
+        if (stateCompareListener != null) {
+            stateCompareListener.onQueueComplete(test);
+        }
     }
 
     public void executeTest(Result result) {
@@ -184,7 +210,9 @@ public class StateCompareService {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        stateResult.onCompareComplete(result);
+        if (stateCompareListener != null) {
+            stateCompareListener.onCompareComplete(result);
+        }
     }
 
     protected void blockOffIgnored(State state, BufferedImage bufferedImage) {

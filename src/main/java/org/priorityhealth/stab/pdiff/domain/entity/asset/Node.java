@@ -9,9 +9,6 @@ import java.util.Date;
 @DatabaseTable(tableName = "asset.nodes")
 public class Node extends AbstractEntity {
 
-    @DatabaseField(generatedId = true)
-    protected int id;
-
     @DatabaseField
     protected String name;
 
@@ -23,15 +20,6 @@ public class Node extends AbstractEntity {
 
     @DatabaseField
     protected Date created;
-
-    public int getId() {
-        return id;
-    }
-
-    public Node setId(int id) {
-        this.id = id;
-        return this;
-    }
 
     public String getName() {
         return name;

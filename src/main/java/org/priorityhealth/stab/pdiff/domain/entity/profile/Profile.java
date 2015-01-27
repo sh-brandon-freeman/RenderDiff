@@ -7,13 +7,11 @@ import com.j256.ormlite.table.DatabaseTable;
 import org.priorityhealth.stab.pdiff.domain.entity.AbstractEntity;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @DatabaseTable(tableName = "profile.profiles")
 public class Profile extends AbstractEntity {
-
-    @DatabaseField(generatedId = true)
-    protected int id;
 
     @DatabaseField(canBeNull = false, foreign = true)
     protected Asset asset;
@@ -29,15 +27,6 @@ public class Profile extends AbstractEntity {
 
     @DatabaseField
     protected Date created;
-
-    public int getId() {
-        return id;
-    }
-
-    public Profile setId(int id) {
-        this.id = id;
-        return this;
-    }
 
     public Asset getAsset() {
         return asset;

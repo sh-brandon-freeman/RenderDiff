@@ -15,4 +15,16 @@ public class LogService {
     public static void Warn(Object caller, String message) {
         Logger.getLogger(caller.getClass().getName()).log(Level.WARN, message);
     }
+
+    public static void Info(String caller, String message) {
+        Logger.getLogger(caller).log(Level.INFO, message);
+    }
+
+    public static void Error(String caller, String message) {
+        Logger.getLogger(caller).log(Level.ERROR, message);
+    }
+
+    public static void Warn(String caller, String message) {
+        Logger.getLogger(caller).log(Level.WARN, message);
+    }
 }

@@ -26,6 +26,9 @@ public class MainController extends AbstractParentController {
     @FXML
     private MenuItem menuAsset;
 
+    @FXML
+    private MenuItem menuSchedule;
+
     public MainController(ControllerFactory controllerFactory) {
         super(controllerFactory);
     }
@@ -49,6 +52,12 @@ public class MainController extends AbstractParentController {
             @Override
             public void handle(ActionEvent e) {
                 setScreen(TestController.CONTROLLER_NAME);
+            }
+        });
+        menuSchedule.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                setScreen(ComparatorController.CONTROLLER_NAME);
             }
         });
     }

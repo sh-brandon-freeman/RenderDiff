@@ -11,17 +11,14 @@ import org.priorityhealth.stab.pdiff.domain.repository.asset.AssetRepositoryInte
 import org.priorityhealth.stab.pdiff.domain.repository.asset.NodeRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.ProfileRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.StateRepositoryInterface;
-import org.priorityhealth.stab.pdiff.service.DateTimeService;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
 import org.priorityhealth.stab.pdiff.domain.service.comparator.ProfilerService;
 import org.priorityhealth.stab.pdiff.service.LogService;
 import org.priorityhealth.stab.pdiff.view.converter.AssetStringConverter;
 import org.priorityhealth.stab.pdiff.view.factory.AssetCellFactory;
 
-import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -33,6 +30,7 @@ public class ProfileController implements Initializable {
     protected NodeRepositoryInterface nodeRepository;
     protected StateRepositoryInterface stateRepository;
     protected ProfileRepositoryInterface profileRepository;
+    protected ProfilerService profilerService;
 
     @FXML
     private Button btnProfile;
@@ -53,16 +51,20 @@ public class ProfileController implements Initializable {
             AssetRepositoryInterface assetRepository,
             NodeRepositoryInterface nodeRepository,
             ProfileRepositoryInterface profileRepository,
-            StateRepositoryInterface stateRepository
+            StateRepositoryInterface stateRepository,
+            ProfilerService profilerService
     ) {
         this.assetRepository = assetRepository;
         this.nodeRepository = nodeRepository;
         this.profileRepository = profileRepository;
         this.stateRepository = stateRepository;
+        this.profilerService = profilerService;
     }
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        profilerService.setWebView(wvProfile);
 
         btnProfile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -72,16 +74,7 @@ public class ProfileController implements Initializable {
                 Asset nodeListAsset = cbAssetNodes.getValue();
 
                 LogService.Info(this, "Beginning Profile for: " + asset.getName());
-                ProfilerService profilerService = new ProfilerService(
-                        wvProfile,
-                        asset,
-                        System.getProperty("user.home") + File.separator + "pdiff" +
-                                File.separator + DateTimeService.getTimestamp("yyyy_MM_dd_HH_mm_ss"),
-                        assetRepository,
-                        nodeRepository,
-                        stateRepository,
-                        profileRepository
-                );
+                profilerService.init(asset);
 
                 if (nodeListAsset != null) {
                     LogService.Info(this, "Using alternate node list from " + nodeListAsset.getName());
@@ -92,7 +85,7 @@ public class ProfileController implements Initializable {
                     profilerService.setCrawlNewNodes(false);
                 }
 
-                profilerService.begin();
+                profilerService.run();
             }
         });
 

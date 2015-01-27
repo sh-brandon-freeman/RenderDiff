@@ -2,7 +2,6 @@ package org.priorityhealth.stab.pdiff.persistence.repository;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import org.priorityhealth.stab.pdiff.domain.repository.AbstractRepositoryInterface;
@@ -11,35 +10,40 @@ import java.lang.reflect.ParameterizedType;
 import java.sql.SQLException;
 import java.util.List;
 
-abstract public class AbstractRepository<T> implements AbstractRepositoryInterface<T> {
-    protected Dao<T, String> dao;
+abstract public class AbstractRepository<AbstractEntity> implements AbstractRepositoryInterface<AbstractEntity> {
+    protected Dao<AbstractEntity, String> dao;
     protected ConnectionSource connectionSource;
-    protected Class<T> genericClass;
+    protected Class<AbstractEntity> genericClass;
 
     @SuppressWarnings("unchecked") // I don't know how to get around this ...
     public AbstractRepository(ConnectionSource connectionSource) throws SQLException {
         this.connectionSource = connectionSource;
-        genericClass = ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+        genericClass = ((Class<AbstractEntity>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
         dao = DaoManager.createDao(connectionSource, genericClass);
+        if (!dao.isTableExists()) {
+            TableUtils.createTable(connectionSource, genericClass);
+        }
     }
 
-    public T getById(int id) throws SQLException {
+    public AbstractEntity getById(int id) throws SQLException {
         return dao.queryBuilder().where().eq("id", id).queryForFirst();
     }
 
-    public List<T> getAll() throws SQLException {
+    public List<AbstractEntity> getAll() throws SQLException {
         return dao.queryBuilder().query();
     }
 
-    public void create(T entity) throws SQLException {
+    public void create(AbstractEntity entity) throws SQLException {
         dao.create(entity);
+        dao.refresh(entity);
     }
 
-    public void update(T entity) throws SQLException {
+    public void update(AbstractEntity entity) throws SQLException {
         dao.update(entity);
+        dao.refresh(entity);
     }
 
-    public void delete(T entity) throws SQLException {
+    public void delete(AbstractEntity entity) throws SQLException {
         dao.delete(entity);
     }
 
@@ -47,11 +51,11 @@ abstract public class AbstractRepository<T> implements AbstractRepositoryInterfa
         connectionSource.close();
     }
 
-    public void createTable() throws SQLException{
-        TableUtils.createTable(connectionSource, genericClass);
+    public Dao<AbstractEntity, String> getDao() {
+        return dao;
     }
 
-    public Dao<T, String> getDao() {
-        return dao;
+    public void refresh(AbstractEntity entity) throws SQLException {
+        dao.refresh(entity);
     }
 }

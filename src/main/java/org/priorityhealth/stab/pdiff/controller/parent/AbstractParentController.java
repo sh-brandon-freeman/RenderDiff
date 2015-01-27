@@ -11,7 +11,9 @@ import sun.plugin.javascript.navig.Anchor;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,11 +57,14 @@ abstract public class AbstractParentController implements Initializable {
 
         String styleName = "/views/css/" + name.toLowerCase() + ".css";
         try {
-            File cssFile = new File(this.getClass().getResource(styleName).toURI());
-            if (cssFile.exists() && !cssFile.isDirectory()) {
-                screen.getStylesheets().add(styleName);
-            } else {
-                LogService.Info(this, "Css file '" + cssFile + "' doesn't exist!");
+            URL cssUrl = getClass().getResource(styleName);
+            if (cssUrl != null) {
+                File cssFile = new File(cssUrl.toURI());
+                if (cssFile.exists() && !cssFile.isDirectory()) {
+                    screen.getStylesheets().add(styleName);
+                } else {
+                    LogService.Info(this, "Css file '" + cssFile + "' doesn't exist!");
+                }
             }
         } catch (URISyntaxException ex) {
             LogService.Info(this, "Css file not a valid resource!");

@@ -13,9 +13,6 @@ import java.util.Date;
 @DatabaseTable(tableName = "test.tests")
 public class Test extends AbstractEntity {
 
-    @DatabaseField(generatedId = true)
-    protected int id;
-
     @DatabaseField(canBeNull = false, foreign = true)
     protected Profile known;
 
@@ -27,14 +24,6 @@ public class Test extends AbstractEntity {
 
     @ForeignCollectionField(eager = true)
     protected ForeignCollection<Result> results;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Profile getKnown() {
         return known;

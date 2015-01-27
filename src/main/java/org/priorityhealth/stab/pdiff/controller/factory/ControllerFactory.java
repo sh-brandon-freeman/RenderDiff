@@ -1,10 +1,8 @@
 package org.priorityhealth.stab.pdiff.controller.factory;
 
 import javafx.util.Callback;
-import org.priorityhealth.stab.pdiff.controller.AssetController;
-import org.priorityhealth.stab.pdiff.controller.MainController;
-import org.priorityhealth.stab.pdiff.controller.ProfileController;
-import org.priorityhealth.stab.pdiff.controller.TestController;
+import org.priorityhealth.stab.pdiff.controller.*;
+import org.priorityhealth.stab.pdiff.domain.service.comparator.factory.ComparatorServiceFactory;
 import org.priorityhealth.stab.pdiff.persistence.repository.factory.RepositoryFactory;
 import org.priorityhealth.stab.pdiff.service.LogService;
 
@@ -50,7 +48,8 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
                     repositoryFactory.getAssetRepository(),
                     repositoryFactory.getNodeRepository(),
                     repositoryFactory.getProfileRepository(),
-                    repositoryFactory.getStateRepository()
+                    repositoryFactory.getStateRepository(),
+                    ComparatorServiceFactory.getProfilerService()
             );
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -65,7 +64,25 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
                     repositoryFactory.getProfileRepository(),
                     repositoryFactory.getStateRepository(),
                     repositoryFactory.getResultRepository(),
-                    repositoryFactory.getTestRepository()
+                    repositoryFactory.getTestRepository(),
+                    ComparatorServiceFactory.getStateCompareService()
+            );
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public ComparatorController getComparatorController() {
+        try {
+            return new ComparatorController(
+                    repositoryFactory.getAssetRepository(),
+                    repositoryFactory.getNodeRepository(),
+                    repositoryFactory.getProfileRepository(),
+                    repositoryFactory.getResultRepository(),
+                    repositoryFactory.getStateRepository(),
+                    repositoryFactory.getTestRepository(),
+                    ComparatorServiceFactory.getComparatorService()
             );
         } catch (SQLException ex) {
             ex.printStackTrace();

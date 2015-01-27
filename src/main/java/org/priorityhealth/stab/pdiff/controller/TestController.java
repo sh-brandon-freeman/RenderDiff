@@ -18,20 +18,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.Profile;
 import org.priorityhealth.stab.pdiff.domain.entity.profile.State;
 import org.priorityhealth.stab.pdiff.domain.entity.asset.Asset;
 import org.priorityhealth.stab.pdiff.domain.entity.test.Result;
+import org.priorityhealth.stab.pdiff.domain.entity.test.Test;
 import org.priorityhealth.stab.pdiff.domain.repository.asset.AssetRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.ProfileRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.profile.StateRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.test.ResultRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.repository.test.TestRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.service.comparator.StateCompareService;
-import org.priorityhealth.stab.pdiff.domain.service.comparator.StateResultInterface;
-import org.priorityhealth.stab.pdiff.service.DateTimeService;
+import org.priorityhealth.stab.pdiff.domain.service.comparator.StateCompareListenerInterface;
 import org.priorityhealth.stab.pdiff.service.ImageService;
 import org.priorityhealth.stab.pdiff.service.LogService;
 import org.priorityhealth.stab.pdiff.view.converter.AssetStringConverter;
@@ -41,13 +39,12 @@ import org.priorityhealth.stab.pdiff.view.factory.ProfileCellFactory;
 import org.priorityhealth.stab.pdiff.view.factory.ResultCellFactory;
 import org.priorityhealth.stab.pdiff.view.factory.StateCellFactory;
 
-import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class TestController implements Initializable, StateResultInterface {
+public class TestController implements Initializable, StateCompareListenerInterface {
 
     public static final String CONTROLLER_NAME = "TEST";
 
@@ -56,6 +53,7 @@ public class TestController implements Initializable, StateResultInterface {
     protected StateRepositoryInterface stateRepository;
     protected ResultRepositoryInterface resultRepository;
     protected TestRepositoryInterface testRepository;
+    protected StateCompareService stateCompareService;
 
     protected ObservableList<Result> resultsList;
     protected ObservableList<Result> allResultsList;
@@ -116,13 +114,15 @@ public class TestController implements Initializable, StateResultInterface {
             ProfileRepositoryInterface profileRepository,
             StateRepositoryInterface stateRepository,
             ResultRepositoryInterface resultRepository,
-            TestRepositoryInterface testRepository
+            TestRepositoryInterface testRepository,
+            StateCompareService stateCompareService
     ) {
         this.assetRepository = assetRepository;
         this.profileRepository = profileRepository;
         this.stateRepository = stateRepository;
         this.resultRepository = resultRepository;
         this.testRepository = testRepository;
+        this.stateCompareService = stateCompareService;
 
         resultsList = FXCollections.observableArrayList();
         allResultsList = FXCollections.observableArrayList();
@@ -255,7 +255,7 @@ public class TestController implements Initializable, StateResultInterface {
             }
         });
 
-        final StateResultInterface stateResult = this;
+        final StateCompareListenerInterface stateResult = this;
         btnCompare.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -265,15 +265,11 @@ public class TestController implements Initializable, StateResultInterface {
                 if (profile1 != null && profile2 != null) {
                     resultsList.clear();
                     allResultsList.clear();
-                    StateCompareService stateCompareService = new StateCompareService(
+                    stateCompareService.init(
                             profile1,
-                            profile2,
-                            System.getProperty("user.home") + File.separator + "pdiff" +
-                                    File.separator + DateTimeService.getTimestamp("yyyy_MM_dd_HH_mm_ss"),
-                            stateResult,
-                            resultRepository,
-                            testRepository
+                            profile2
                     );
+                    stateCompareService.setStateCompareListener(stateResult);
                     stateCompareService.run();
                 }
             }
@@ -421,7 +417,7 @@ public class TestController implements Initializable, StateResultInterface {
     }
 
     @Override
-    public void onQueueComplete() {
+    public void onQueueComplete(Test test) {
         resultsList.addAll(allResultsList);
     }
 }

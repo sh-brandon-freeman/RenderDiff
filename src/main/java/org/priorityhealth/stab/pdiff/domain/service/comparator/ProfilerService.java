@@ -1,7 +1,6 @@
 package org.priorityhealth.stab.pdiff.domain.service.comparator;
 
 import com.j256.ormlite.dao.ForeignCollection;
-import com.sun.webkit.network.Util;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -32,17 +31,10 @@ import org.priorityhealth.stab.pdiff.service.LogService;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLStreamHandler;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static com.sun.webkit.LoadListenerClient.LOAD_FAILED;
-import static com.sun.webkit.LoadListenerClient.MALFORMED_URL;
-import static com.sun.webkit.LoadListenerClient.PAGE_STARTED;
 
 /**
  *
@@ -50,9 +42,8 @@ import static com.sun.webkit.LoadListenerClient.PAGE_STARTED;
 public class ProfilerService implements BrowserStateChangeHandlerInterface {
 
     public static final int waitTime = 5000;
-    protected final WebView webView;
-    protected final WebEngine webEngine;
-    protected String profileTimestamp;
+    protected WebView webView;
+    protected WebEngine webEngine;
     protected String currentUrl;
     protected String urlHash;
 
@@ -73,36 +64,37 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
     protected boolean usingAlternateNodeList = false;
     protected boolean crawlNewNodes = true;
 
-    /**
-     *
-     * @param webView
-     * @param asset
-     * @param storePath
-     * @param assetRepository
-     * @param nodeRepository
-     * @param stateRepository
-     * @param profileRepository
-     */
+    protected ProfilerListenerInterface profilerListener;
+
     public ProfilerService(
-            WebView webView,
-            Asset asset,
-            String storePath,
             AssetRepositoryInterface assetRepository,
             NodeRepositoryInterface nodeRepository,
             StateRepositoryInterface stateRepository,
-            ProfileRepositoryInterface profileRepository
+            ProfileRepositoryInterface profileRepository,
+            String storePath
     ) {
-        this.webView = webView;
-        this.asset = asset;
-        this.storePath = storePath;
-
         this.assetRepository = assetRepository;
         this.nodeRepository = nodeRepository;
         this.stateRepository = stateRepository;
         this.profileRepository = profileRepository;
+        this.storePath = storePath;
+    }
 
+    public void init(Asset asset) {
+        this.asset = asset;
+        attachEvents();
+    }
+
+    public void setWebView(WebView webView) {
+        this.webView = webView;
         this.webEngine = webView.getEngine();
+    }
 
+    public void setProfilerListener(ProfilerListenerInterface profilerListener) {
+        this.profilerListener = profilerListener;
+    }
+
+    public void attachEvents() {
         webEngine.getLoadWorker().stateProperty().addListener(
                 new BrowserStateChangeListener(webEngine, this)
         );
@@ -115,16 +107,21 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
         });
     }
 
-    public void begin() {
+    public void run() {
         if (asset == null) {
             LogService.Info(this, "There was no asset to profile.");
             return;
         }
 
-        this.profile = new Profile();
-        this.profile.setAsset(asset).setCreated(new Date());
+        if (webView == null) {
+            LogService.Info(this, "There was no webview available.");
+            return;
+        }
+
+        profile = new Profile();
+        profile.setAsset(asset).setCreated(new Date());
         try {
-            profileRepository.create(this.profile);
+            profileRepository.create(profile);
         } catch (SQLException ex) {
             ex.printStackTrace();
             return;
@@ -177,7 +174,7 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
     }
 
     private double setDocumentHeight() {
-        String heightText = webView.getEngine().executeScript(
+        String heightText = webEngine.executeScript(
                 "window.getComputedStyle(document.body, null).getPropertyValue('height')"
         ).toString();
         Double newHeight = Math.ceil(Double.valueOf(heightText.replace("px", "")));
@@ -338,6 +335,9 @@ public class ProfilerService implements BrowserStateChangeHandlerInterface {
             profileRepository.update(this.profile);
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+        if (profilerListener != null) {
+            profilerListener.onProfileComplete(profile);
         }
     }
 
