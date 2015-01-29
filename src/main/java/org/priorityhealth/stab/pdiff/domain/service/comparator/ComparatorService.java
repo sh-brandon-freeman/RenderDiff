@@ -8,7 +8,7 @@ import org.priorityhealth.stab.pdiff.domain.entity.test.Result;
 import org.priorityhealth.stab.pdiff.domain.entity.test.Test;
 import org.priorityhealth.stab.pdiff.service.LogService;
 
-public class ComparatorService implements ProfilerListenerInterface, StateCompareListenerInterface {
+public class ComparatorService implements ProfilerListenerInterface {
 
     protected ProfilerService profilerService;
     protected StateCompareService stateCompareService;
@@ -21,13 +21,14 @@ public class ComparatorService implements ProfilerListenerInterface, StateCompar
     protected boolean useAsset1Nodes;
 
     protected int profiledIndex = 0;
+    protected StateCompareListenerInterface stateCompareListener;
 
     public ComparatorService(ProfilerService profilerService, StateCompareService stateCompareService) {
         this.profilerService = profilerService;
         this.stateCompareService = stateCompareService;
     }
 
-    public void init(Asset asset1, Profile profile1, Asset asset2, Profile profile2, boolean useAsset1Nodes) {
+    public void init(Asset asset1, Profile profile1, Asset asset2, Profile profile2, boolean useAsset1Nodes, StateCompareListenerInterface stateCompareListener) {
         LogService.Info(this, "Init ...");
         if (webEngine == null) {
             LogService.Info(this, "No webengine specified.");
@@ -51,6 +52,7 @@ public class ComparatorService implements ProfilerListenerInterface, StateCompar
         this.profiles[0] = profile1;
         this.profiles[1] = profile2;
         this.useAsset1Nodes = useAsset1Nodes;
+        this.stateCompareListener = stateCompareListener;
 
         LogService.Info(this, assets.toString());
     }
@@ -110,18 +112,8 @@ public class ComparatorService implements ProfilerListenerInterface, StateCompar
                 profiles[0],
                 profiles[1]
         );
-        stateCompareService.setStateCompareListener(this);
+        stateCompareService.setStateCompareListener(stateCompareListener);
         stateCompareService.run();
-    }
-
-    @Override
-    public void onCompareComplete(Result result) {
-        // Nobody cares
-    }
-
-    @Override
-    public void onQueueComplete(Test test) {
-
     }
 
     public void setWebView(WebView webView) {

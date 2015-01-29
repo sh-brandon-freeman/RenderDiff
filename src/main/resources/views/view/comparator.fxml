@@ -4,6 +4,7 @@
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
@@ -112,19 +113,67 @@
             </Button>
          </children>
       </VBox>
-      <StackPane prefHeight="150.0" prefWidth="200.0">
-         <children>
-            <AnchorPane prefHeight="178.0" prefWidth="290.0">
+      <SplitPane dividerPositions="0.1, 0.5" orientation="VERTICAL">
+         <items>
+            <StackPane prefHeight="315.0" prefWidth="290.0">
                <children>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <ScrollPane prefHeight="40.0" prefWidth="290.0">
                      <content>
                         <WebView fx:id="wvProfile" prefHeight="200.0" prefWidth="200.0" />
                      </content>
                   </ScrollPane>
+                  <Pane disable="true" opacity="0.0" prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </StackPane>
+            <AnchorPane>
+               <children>
+                  <SplitPane dividerPositions="0.33, 0.66" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <items>
+                        <ScrollPane fx:id="spKnown" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+                           <content>
+                              <ImageView fx:id="ivKnown" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane fx:id="spDiff" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+                           <content>
+                              <ImageView fx:id="ivDiff" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane fx:id="spCurrent" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+                           <content>
+                              <ImageView fx:id="ivCurrent" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                           </content>
+                        </ScrollPane>
+                     </items>
+                  </SplitPane>
                </children>
             </AnchorPane>
-            <Pane disable="true" opacity="0.0" prefHeight="200.0" prefWidth="200.0" />
-         </children>
-      </StackPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <center>
+                  <ListView fx:id="lvResults" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+               </center>
+               <top>
+                  <HBox prefHeight="13.0" prefWidth="295.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="btnAllResults" mnemonicParsing="false" text="All" />
+                        <Button fx:id="btnDifferentResults" mnemonicParsing="false" text="Different">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btnSameResults" mnemonicParsing="false" text="Same">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+               </top>
+            </BorderPane>
+         </items>
+      </SplitPane>
    </items>
 </SplitPane>
