@@ -7,15 +7,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.priorityhealth.stab.pdiff.controller.factory.ControllerFactory;
 import org.priorityhealth.stab.pdiff.service.LogService;
-import sun.plugin.javascript.navig.Anchor;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 abstract public class AbstractParentController implements Initializable {
 
@@ -27,17 +23,6 @@ abstract public class AbstractParentController implements Initializable {
 
     public boolean setScreen(final String name) {
         String viewName = "/views/view/" + name.toLowerCase() + ".fxml";
-
-        try {
-            File viewFile = new File(this.getClass().getResource(viewName).toURI());
-            if (!viewFile.exists() || viewFile.isDirectory()) {
-                LogService.Info(this, "View file '" + viewFile + "' doesn't exist!");
-                return false;
-            }
-        } catch (URISyntaxException ex) {
-            LogService.Info(this, "View file not a valid resource!");
-            return false;
-        }
 
         Pane contentPane = getContentPane();
         if (contentPane == null) {

@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.apache.log4j.Priority;
 import org.priorityhealth.stab.pdiff.controller.factory.ControllerFactory;
 import org.priorityhealth.stab.pdiff.domain.service.comparator.factory.ComparatorServiceFactory;
 import org.priorityhealth.stab.pdiff.persistence.repository.factory.RepositoryFactory;

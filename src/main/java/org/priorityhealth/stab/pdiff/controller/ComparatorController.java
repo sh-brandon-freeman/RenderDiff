@@ -1,6 +1,5 @@
 package org.priorityhealth.stab.pdiff.controller;
 
-import com.sun.deploy.util.StringUtils;
 import javafx.beans.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -28,7 +27,6 @@ import org.priorityhealth.stab.pdiff.domain.repository.test.ResultRepositoryInte
 import org.priorityhealth.stab.pdiff.domain.repository.test.TestRepositoryInterface;
 import org.priorityhealth.stab.pdiff.domain.service.comparator.ComparatorService;
 import org.priorityhealth.stab.pdiff.domain.service.comparator.StateCompareListenerInterface;
-import org.priorityhealth.stab.pdiff.domain.service.comparator.factory.ComparatorServiceFactory;
 import org.priorityhealth.stab.pdiff.service.ImageService;
 import org.priorityhealth.stab.pdiff.service.LogService;
 import org.priorityhealth.stab.pdiff.view.converter.AssetStringConverter;
@@ -41,7 +39,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
-import java.util.Observable;
 
 public class ComparatorController implements Initializable, StateCompareListenerInterface {
 

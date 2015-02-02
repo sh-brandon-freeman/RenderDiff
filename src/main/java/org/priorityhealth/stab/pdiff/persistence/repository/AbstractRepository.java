@@ -26,7 +26,7 @@ abstract public class AbstractRepository<AbstractEntity> implements AbstractRepo
     }
 
     public AbstractEntity getById(int id) throws SQLException {
-        return dao.queryBuilder().where().eq("id", id).queryForFirst();
+        return dao.queryForFirst(dao.queryBuilder().where().eq("id", id).prepare());
     }
 
     public List<AbstractEntity> getAll() throws SQLException {
