@@ -44,7 +44,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class TestController implements Initializable, StateCompareListenerInterface {
+public class TestController extends AbstractController implements Initializable, StateCompareListenerInterface {
 
     public static final String CONTROLLER_NAME = "TEST";
 

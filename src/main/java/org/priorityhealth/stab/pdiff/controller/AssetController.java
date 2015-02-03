@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class AssetController implements Initializable {
+public class AssetController extends AbstractController implements Initializable {
 
     public static final String CONTROLLER_NAME = "ASSET";
 

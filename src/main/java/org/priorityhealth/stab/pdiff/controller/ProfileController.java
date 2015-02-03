@@ -22,7 +22,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ProfileController implements Initializable {
+public class ProfileController extends AbstractController implements Initializable {
 
     public static final String CONTROLLER_NAME = "PROFILE";
 

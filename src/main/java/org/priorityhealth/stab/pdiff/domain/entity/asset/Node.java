@@ -56,4 +56,10 @@ public class Node extends AbstractEntity {
         this.created = created;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "{url='" + url + '\'' +
+                '}';
+    }
 }

@@ -64,4 +64,14 @@ public class Result extends AbstractEntity {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "test=" + test +
+                ", current=" + current +
+                ", known=" + known +
+                ", diffImagePath='" + diffImagePath + '\'' +
+                '}';
+    }
 }

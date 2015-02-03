@@ -84,4 +84,13 @@ public class State extends AbstractEntity {
         this.ignoredAreas.remove(ignoredArea);
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "node=" + node +
+                ", profile=" + profile +
+                ", imagePath='" + imagePath + '\'' +
+                '}';
+    }
 }

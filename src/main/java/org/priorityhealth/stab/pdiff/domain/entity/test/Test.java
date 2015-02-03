@@ -64,4 +64,13 @@ public class Test extends AbstractEntity {
     public void removeResult(Result result) {
         this.results.remove(result);
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "known=" + known +
+                ", current=" + current +
+                ", results=" + results +
+                '}';
+    }
 }

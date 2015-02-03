@@ -20,7 +20,7 @@ public class UniversalLoginService {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost post = new HttpPost(url);
 
-        StringEntity postingString = null;
+        StringEntity postingString;
         try {
             LogService.Info("UniversalLoginService", "Using creds: " + credentials);
             postingString = new StringEntity(gson.toJson(credentials));

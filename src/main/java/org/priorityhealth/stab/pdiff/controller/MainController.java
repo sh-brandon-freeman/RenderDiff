@@ -7,7 +7,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.priorityhealth.stab.pdiff.controller.factory.ControllerFactory;
-import org.priorityhealth.stab.pdiff.controller.parent.AbstractParentController;
+import org.priorityhealth.stab.pdiff.service.LogService;
+import org.priorityhealth.stab.pdiff.view.headless.HeadlessAppLauncher;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -60,6 +61,11 @@ public class MainController extends AbstractParentController {
                 setScreen(ComparatorController.CONTROLLER_NAME);
             }
         });
+
+        if (isHeadless()) {
+            LogService.Info(this, "HEADLESS!!");
+            setScreen(ComparatorController.CONTROLLER_NAME);
+        }
     }
 
     @Override

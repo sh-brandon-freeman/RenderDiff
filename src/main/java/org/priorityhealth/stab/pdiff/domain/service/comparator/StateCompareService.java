@@ -166,7 +166,7 @@ public class StateCompareService {
 
     public void executeTest(Result result) {
         try {
-            Path tempDiffPath = Files.createTempFile("diff-now", ".png");
+            Path tempDiffPath = Files.createTempFile("diff-diff", ".png");
             Path tempKnownPath = Files.createTempFile("diff-known", ".png");
             Path tempCurrentPath = Files.createTempFile("diff-now", ".png");
 

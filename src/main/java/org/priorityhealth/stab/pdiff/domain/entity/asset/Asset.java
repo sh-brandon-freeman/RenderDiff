@@ -178,4 +178,11 @@ public class Asset extends AbstractEntity {
         this.password = password;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "{name='" + name + '\'' +
+                ", domain='" + domain + '\'' +
+                '}';
+    }
 }

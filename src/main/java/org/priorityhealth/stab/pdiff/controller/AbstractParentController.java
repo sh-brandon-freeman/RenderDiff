@@ -1,4 +1,4 @@
-package org.priorityhealth.stab.pdiff.controller.parent;
+package org.priorityhealth.stab.pdiff.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-abstract public class AbstractParentController implements Initializable {
+abstract public class AbstractParentController extends AbstractController implements Initializable {
 
     protected ControllerFactory controllerFactory;
 

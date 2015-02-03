@@ -7,13 +7,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.apache.log4j.Priority;
+import org.priorityhealth.stab.pdiff.controller.AbstractController;
 import org.priorityhealth.stab.pdiff.controller.factory.ControllerFactory;
 import org.priorityhealth.stab.pdiff.domain.service.comparator.factory.ComparatorServiceFactory;
 import org.priorityhealth.stab.pdiff.persistence.repository.factory.RepositoryFactory;
+import org.priorityhealth.stab.pdiff.service.ParameterService;
 import org.priorityhealth.stab.pdiff.service.http.UrlMonitoringStreamHandlerFactory;
+import org.priorityhealth.stab.pdiff.view.headless.HeadlessAppLauncher;
 
 import java.net.URL;
+import java.util.List;
 
 public class MainApp extends Application {
 
@@ -23,6 +26,8 @@ public class MainApp extends Application {
      */
     @Override
     public void start(final Stage stage) throws Exception {
+
+        ParameterService.setParameters(getParameters().getRaw());
 
         URL.setURLStreamHandlerFactory(new UrlMonitoringStreamHandlerFactory());
 
@@ -45,9 +50,9 @@ public class MainApp extends Application {
     /**
      * Main
      *
-     * @param args Arguments
+     * @param appArgs Arguments
      */
-    public static void main(String[] args) {
-        launch(args);
+    public static void main(String[] appArgs) {
+        new HeadlessAppLauncher().launch(MainApp.class, appArgs);
     }
 }

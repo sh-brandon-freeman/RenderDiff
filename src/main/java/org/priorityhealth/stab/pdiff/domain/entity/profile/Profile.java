@@ -73,4 +73,13 @@ public class Profile extends AbstractEntity {
         this.complete = complete;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "asset=" + asset +
+                ", complete=" + complete +
+                ", created=" + created +
+                '}';
+    }
 }
